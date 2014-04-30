@@ -13,8 +13,8 @@ individus-own [
   ]
 
 patches-own [
-;  busy?
   t
+  white-patch
   ]
 
 
@@ -24,8 +24,6 @@ to setup
   make-individus init-individus
   
   set gradient-pollution 9.9 / 10
-
-;  set t 0
   
 ;  set happy 0
 ;  set unhappy 0
@@ -46,8 +44,8 @@ to go
     move 
     regroup
     pollutate
+    reac-polution
 ;    get-happy
-;     print pcolor
     ] 
   
   ask patches [
@@ -99,9 +97,6 @@ to move
     lt random 360 ; pareil pour tourner la tête à gauche
   ]
   fd 1 ; forward = avance de 1
-;  print xcor
-;  print ycor
-  
 end
 
 
@@ -130,11 +125,6 @@ to pollutate
     ] [
     set pcolor 0
     ]
-;   print "inpollutate" 
-;   print pxcor
-;   print pycor
-;   print pcolor
-;   print "fini"
   set t pollution-retention
 end
 
@@ -144,6 +134,22 @@ to decontaminate
   if t <= 0 [
     set pcolor pcolor + gradient-pollution
     ]
+end
+
+
+;; REACTION POLLUTION
+
+to reac-polution
+  let black-neighbors? (count neighbors with [pcolor = 0] >= max-pollution)
+  
+  if black-neighbors? [
+    ifelse any? neighbors with [pcolor = 9.9] [
+      set heading towards one-of neighbors with [pcolor = 9.9]
+    ] [
+      move
+    ] 
+  ]
+  
 end
 
 
@@ -277,6 +283,21 @@ pollution-retention
 1
 0
 Number
+
+SLIDER
+10
+356
+182
+389
+max-pollution
+max-pollution
+1
+8
+1
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
