@@ -2,6 +2,7 @@ globals [
   happy
   unhappy
   degradation
+  t
   ]
 
 breed [individus individu]
@@ -18,7 +19,9 @@ to setup
   reset-ticks
   make-individus init-individus
   
-  set degradation 255 / pollution-rate
+  set degradation 9.9 / pollution-rate
+  set t pollution-retention
+  set t 0
   
 ;  set happy 0
 ;  set unhappy 0
@@ -40,6 +43,12 @@ to go
     pollutate
     get-happy
     ] 
+  
+  ask patches [
+    if pcolor != 9.9 [
+      decontaminate
+    ]
+    ]
   
   tick
 end
@@ -102,15 +111,41 @@ to regroup
 end
 
 
+
 ;; POLLUTION
 
 to pollutate
-  ifelse pcolor > 1 [
-    set pcolor pcolor - 1
-  ] [
-    set pcolor black
-  ]
+  ;; Colorer les cases après le passage d'un individu (gradient de blanc-noir)
+  ifelse pcolor > degradation [
+    ;; Gradient de noir
+    set pcolor pcolor - degradation
+    ] [
+    set pcolor 0
+    ]
+  
 end
+
+
+to decontaminate
+  set t t - 1
+  ifelse t <= 0 [
+    set pcolor pcolor + degradation
+    ] [
+    if pcolor > 9.9 - degradation [
+      set pcolor 9.9
+    ]
+    ]
+  
+end
+
+
+
+
+
+
+
+
+
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -191,7 +226,7 @@ INPUTBOX
 185
 321
 vision
-0
+5
 1
 0
 Number
@@ -225,12 +260,23 @@ NIL
 1
 
 INPUTBOX
-31
-333
-186
-393
+30
+326
+185
+386
 pollution-rate
-3
+5
+1
+0
+Number
+
+INPUTBOX
+31
+390
+186
+450
+pollution-retention
+5
 1
 0
 Number
