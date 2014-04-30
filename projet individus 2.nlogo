@@ -1,8 +1,7 @@
 globals [
   happy
   unhappy
-  degradation
-  t
+  gradient-pollution
   ]
 
 breed [individus individu]
@@ -13,15 +12,20 @@ individus-own [
   happy?
   ]
 
+patches-own [
+;  busy?
+  t
+  ]
+
 
 to setup
   clear-all
   reset-ticks
   make-individus init-individus
   
-  set degradation 9.9 / pollution-rate
-  set t pollution-retention
-  set t 0
+  set gradient-pollution 9.9 / 10
+
+;  set t 0
   
 ;  set happy 0
 ;  set unhappy 0
@@ -30,6 +34,7 @@ to setup
     set move? true
     set regroup? false
     set happy? false
+    
     ]
   
   ask patches [set pcolor 9.9]
@@ -41,7 +46,8 @@ to go
     move 
     regroup
     pollutate
-    get-happy
+;    get-happy
+;     print pcolor
     ] 
   
   ask patches [
@@ -64,15 +70,15 @@ to make-individus [#n]
 end
 
 
-to get-happy
-  set happy 0
-  set unhappy 0
-  
-  if regroup? = true [
-    set unhappy happy + 1
-    ]
-  set unhappy (init-individus - happy)
-end
+;to get-happy
+;  set happy 0
+;  set unhappy 0
+;  
+;  if regroup? = true [
+;    set unhappy happy + 1
+;    ]
+;  set unhappy (init-individus - happy)
+;end
 
 
 
@@ -93,6 +99,8 @@ to move
     lt random 360 ; pareil pour tourner la tête à gauche
   ]
   fd 1 ; forward = avance de 1
+;  print xcor
+;  print ycor
   
 end
 
@@ -116,26 +124,26 @@ end
 
 to pollutate
   ;; Colorer les cases après le passage d'un individu (gradient de blanc-noir)
-  ifelse pcolor > degradation [
+  ifelse pcolor >= gradient-pollution [
     ;; Gradient de noir
-    set pcolor pcolor - degradation
+    set pcolor pcolor - gradient-pollution
     ] [
     set pcolor 0
     ]
-  
+;   print "inpollutate" 
+;   print pxcor
+;   print pycor
+;   print pcolor
+;   print "fini"
+  set t pollution-retention
 end
 
 
 to decontaminate
   set t t - 1
-  ifelse t <= 0 [
-    set pcolor pcolor + degradation
-    ] [
-    if pcolor > 9.9 - degradation [
-      set pcolor 9.9
+  if t <= 0 [
+    set pcolor pcolor + gradient-pollution
     ]
-    ]
-  
 end
 
 
@@ -181,7 +189,7 @@ INPUTBOX
 185
 257
 init-individus
-20
+100
 1
 0
 Number
@@ -260,21 +268,10 @@ NIL
 1
 
 INPUTBOX
-30
-326
-185
-386
-pollution-rate
-5
-1
-0
-Number
-
-INPUTBOX
-31
-390
-186
-450
+669
+197
+824
+257
 pollution-retention
 5
 1
