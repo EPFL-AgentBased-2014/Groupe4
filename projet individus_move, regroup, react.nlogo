@@ -43,9 +43,9 @@ end
 
 to go 
   ask individus [
-
-    move 1
+    
     regroup
+    move 1
     pollutate
     reac-polution
    
@@ -97,7 +97,7 @@ end
 ;; DEPLACEMENTS
 
 to move [x]
-  if move? = true [
+  if move? = true or dispersion? = true [
     rt random 360 ; rt = right turn d'un chiffre pris au hasard entre 0° et 360°
     lt random 360 ; pareil pour tourner la tête à gauche
   ]
@@ -115,6 +115,7 @@ to regroup
       set heading towards one-of peopleISee
   set move? false
   set regroup? true
+  set dispersion? false
   ]
 end
 
@@ -238,7 +239,7 @@ INPUTBOX
 185
 257
 init-individus
-20
+150
 1
 0
 Number
@@ -325,7 +326,7 @@ max-pollution
 max-pollution
 1
 8
-4
+2
 1
 1
 NIL
@@ -340,7 +341,7 @@ pollution-retention
 pollution-retention
 1
 100
-85
+50
 1
 1
 NIL
