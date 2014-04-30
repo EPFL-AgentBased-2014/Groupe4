@@ -1,18 +1,11 @@
-<<<<<<< HEAD
-breed [individus individu] ; person <-> individu?
-globals [i 
-=======
 breed [individus individu]
->>>>>>> FETCH_HEAD
 
-    ]
 individus-own [
   move?
   ]
 
 
 to setup
-  set i 0 
   clear-all
   reset-ticks
   make-individus init-individus
@@ -26,11 +19,7 @@ to go
   ask individus [
     move 
     regroup
-<<<<<<< HEAD
-    polluer
-=======
     pollutate
->>>>>>> FETCH_HEAD
     ] 
   
   tick
@@ -81,23 +70,11 @@ to regroup
   ]
 end
 
-<<<<<<< HEAD
-;;POLLUTION
-to polluer
-  set i i + 0.01 
-  
-  
-  ask individus [
-    
-    set pcolor white - i ]
-  ]
-=======
 
 ;; POLLUTION
 
 to pollutate
   ask individus [set pcolor green]
->>>>>>> FETCH_HEAD
 end
 
 
@@ -135,11 +112,7 @@ INPUTBOX
 182
 184
 init-individus
-<<<<<<< HEAD
-10
-=======
 40
->>>>>>> FETCH_HEAD
 1
 0
 Number
