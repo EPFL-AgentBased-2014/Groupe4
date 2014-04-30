@@ -1,7 +1,15 @@
+globals [
+  happy
+  unhappy
+  degradation
+  ]
+
 breed [individus individu]
 
 individus-own [
   move?
+  regroup?
+  happy?
   ]
 
 
@@ -9,17 +17,28 @@ to setup
   clear-all
   reset-ticks
   make-individus init-individus
-  ask individus [ set move? true]
   
-  ask patches [set pcolor white]
+  set degradation 255 / pollution-rate
+  
+;  set happy 0
+;  set unhappy 0
+  
+  ask individus [
+    set move? true
+    set regroup? false
+    set happy? false
+    ]
+  
+  ask patches [set pcolor 9.9]
 end
 
 
-to go
+to go 
   ask individus [
     move 
     regroup
     pollutate
+    get-happy
     ] 
   
   tick
@@ -29,10 +48,21 @@ end
 to make-individus [#n]
   set-default-shape individus "person"
   create-individus #n
-  [ 
+    [ 
     set-individus
     setxy random-xcor random-ycor
-  ]
+    ]
+end
+
+
+to get-happy
+  set happy 0
+  set unhappy 0
+  
+  if regroup? = true [
+    set unhappy happy + 1
+    ]
+  set unhappy (init-individus - happy)
 end
 
 
@@ -40,7 +70,7 @@ end
 ;; INDIVIDUS
 
 to set-individus
-  set color black
+  set color green
   set size 1
 end
 
@@ -50,8 +80,8 @@ end
 
 to move
   if move? = true [
-  rt random 360 ; rt = right turn d'un chiffre pris au hasard entre 0° et 360°
-  lt random 360 ; pareil pour tourner la tête à gauche
+    rt random 360 ; rt = right turn d'un chiffre pris au hasard entre 0° et 360°
+    lt random 360 ; pareil pour tourner la tête à gauche
   ]
   fd 1 ; forward = avance de 1
   
@@ -67,6 +97,7 @@ to regroup
   if count peopleISee > 0 [
       set heading towards one-of peopleISee
   set move? false
+  set regroup? true
   ]
 end
 
@@ -74,9 +105,12 @@ end
 ;; POLLUTION
 
 to pollutate
-  ask individus [set pcolor green]
+  ifelse pcolor > 1 [
+    set pcolor pcolor - 1
+  ] [
+    set pcolor black
+  ]
 end
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -107,12 +141,12 @@ ticks
 30.0
 
 INPUTBOX
-27
-124
-182
-184
+30
+197
+185
+257
 init-individus
-40
+20
 1
 0
 Number
@@ -152,12 +186,51 @@ NIL
 1
 
 INPUTBOX
-34
-216
-189
-276
+30
+261
+185
+321
 vision
-15
+0
+1
+0
+Number
+
+MONITOR
+27
+481
+84
+526
+happy
+happy
+17
+1
+11
+
+BUTTON
+69
+116
+132
+149
+NIL
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+INPUTBOX
+31
+333
+186
+393
+pollution-rate
+3
 1
 0
 Number

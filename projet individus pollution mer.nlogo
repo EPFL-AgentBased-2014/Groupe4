@@ -1,43 +1,40 @@
-<<<<<<< HEAD
-breed [individus individu] ; person <-> individu?
-=======
-<<<<<<< HEAD
-breed [individus individu] ; person <-> individu?
-globals [i 
-=======
-breed [individus individu]
->>>>>>> FETCH_HEAD
->>>>>>> FETCH_HEAD
+breed [individus individu] ; personne <-> individu?
+globals [
+  taux_pollution 
+  i
 
     ]
 individus-own [
   move?
   ]
 
+patches-own []
+
 to setup
   set i 0 
   clear-all
   reset-ticks
 
+  make-individus init-individus
   ask individus [ set move? true]
   ask patches [set pcolor white]
   
-  make-individus init-individus  
+ 
+  
+  
+  
 end
 
 to go
   ask individus [ 
+   
     move 
     regroup
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     polluer
-=======
-    pollutate
->>>>>>> FETCH_HEAD
->>>>>>> FETCH_HEAD
+    demenager
     ] 
+  
+ ; ask patches [pcolor * 0.001] ;;Dépollution des cases grisées au fur et à mesure du temps
   
   tick
 end
@@ -62,6 +59,14 @@ to set-individus
   set size 1
 end
 
+;to combien_de_voisin
+ ; ask individus[count neighbors in-radius vision]
+;end
+
+;to nombre_cases_polluees
+  ;count pactches with [patches != white
+   ; end
+
 ;; DEPLACEMENTS
 
 to move
@@ -74,7 +79,7 @@ end
 ;; ATTRACTION
 
 to regroup
-  let peopleISee other individus in-radius vision
+  let peopleISee other individus in-radius vision with [distance myself > 0.1]
   print peopleISee
     if any? peopleISee [
       ;ask patches [set pcolor yellow]
@@ -85,28 +90,44 @@ to regroup
   
 end
 
-<<<<<<< HEAD
 ;;POLLUTION
 to polluer
-  set i i + 0.01 
-  
-  
-  ask individus [
-    
-    set pcolor white - i ]
+  set i i + capacite_de_pollution
+  ask patches [    
+    if (i >  0)[ 
+      ask individus [ 
+       set pcolor pcolor - i 
+       ]
+    ]
   ]
-=======
-
-<<<<<<< HEAD
-=======
-;; POLLUTION
-
-to pollutate
-  ask individus [set pcolor green]
->>>>>>> FETCH_HEAD
 end
 
->>>>>>> FETCH_HEAD
+;;DEMENAGEMENT SUITE A LA POLLUTION
+  
+  to demenager
+    if (i = 0)[ ;;Lorsque les cases où sont présents les individus sont trop polluées ils se déplacent sur une grande distance aléatoirement quitte à créer des nouveaux centres.
+      ask individus [deplacement]
+    ]
+    end
+    
+    to deplacement
+      rt random 50 ;;La tortue tourne à droite d'une valeur comprise entre 0 et 50
+      lt random 50 ;;Idem à gauche
+      fd 100 ;;Puis avance de 100 patches
+    end
+  
+  
+  ;set taux_pollution taux_pollution + 0.001
+  ;if(taux_pollution >= 0)[
+  ;ask individus [
+  ;set pcolor white - taux_pollution
+  
+  ;scale-color red taux-pollution 0 10
+  ;]
+  
+  ;]
+  
+
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -137,29 +158,21 @@ ticks
 30.0
 
 INPUTBOX
-27
-124
-182
-184
+698
+90
+853
+150
 init-individus
-<<<<<<< HEAD
-20
-=======
-<<<<<<< HEAD
-10
-=======
-40
->>>>>>> FETCH_HEAD
->>>>>>> FETCH_HEAD
+1
 1
 0
 Number
 
 BUTTON
-29
-44
-95
-77
+697
+47
+763
+80
 NIL
 setup
 NIL
@@ -173,10 +186,10 @@ NIL
 1
 
 BUTTON
-125
-44
+699
+155
+762
 188
-77
 NIL
 go
 T
@@ -190,15 +203,30 @@ NIL
 1
 
 INPUTBOX
-26
-206
-181
-266
+857
+89
+1012
+149
 vision
-2
+20
 1
 0
 Number
+
+SLIDER
+706
+218
+894
+251
+capacite_de_pollution
+capacite_de_pollution
+0
+0.01
+0.0097
+0.0001
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
