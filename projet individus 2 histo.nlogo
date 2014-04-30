@@ -3,6 +3,10 @@ globals [
   unhappy
   degradation
   t
+  pc_pollution
+  nombre_voisins_moyen
+  moyen
+
   ]
 
 breed [individus individu]
@@ -11,6 +15,11 @@ individus-own [
   move?
   regroup?
   happy?
+  voisins 
+  ]
+
+patches-own[
+  pollution
   ]
 
 
@@ -19,6 +28,7 @@ to setup
   reset-ticks
   make-individus init-individus
   
+  set moyen 0
   set degradation 9.9 / pollution-rate
   set t pollution-retention
   set t 0
@@ -42,15 +52,22 @@ to go
     regroup
     pollutate
     get-happy
-    taux_pollution
+    
+    compter_voisins
+    
     ] 
+  
   
   ask patches [
     if pcolor != 9.9 [
       decontaminate
     ]
+    set pollution pcolor
     ]
   
+    set pc_pollution  ( 1 - ((mean [pollution] of patches) / 9.9) ) * 100 
+    set moyen mean [voisins] of individus
+
   tick
 end
 
@@ -84,6 +101,11 @@ to set-individus
   set size 1
 end
 
+to compter_voisins
+  set voisins count individus in-radius vision
+  ;show nombre_voisins_moyen
+
+end
 
 
 ;; DEPLACEMENTS
@@ -126,9 +148,9 @@ to pollutate
   
 end
 
-to taux_pollution
-  histogram [pcolor] of patches
-end
+;to taux_pollution
+;  histogram [pcolor] of patches
+;end
 
 to decontaminate
   set t t - 1
@@ -141,7 +163,6 @@ to decontaminate
     ]
   
 end
-
 
 
 
@@ -184,7 +205,7 @@ INPUTBOX
 185
 257
 init-individus
-200
+100
 1
 0
 Number
@@ -268,7 +289,7 @@ INPUTBOX
 185
 386
 pollution-rate
-5
+40
 1
 0
 Number
@@ -284,23 +305,81 @@ pollution-retention
 0
 Number
 
+MONITOR
+899
+371
+985
+416
+NIL
+mean [voisins] of individus
+17
+1
+11
+
+MONITOR
+891
+99
+968
+144
+NIL
+pc_pollution
+17
+1
+11
+
 PLOT
-750
-175
-950
-325
-Taux pollution
-col
-nb
+686
+10
+886
+160
+Pourcentage de pollution
+Temps
+Pollution
+0.0
+100.0
+0.0
+10.0
+false
+false
+"" ""
+PENS
+"pc_pollution" 1.0 0 -16777216 true "" "plot pc_pollution"
+
+PLOT
+687
+174
+887
+324
+Taux de pollution
+Pollution
+Nombre de cellules polluées
 0.0
 10.0
 0.0
 100.0
 false
-true
-"set-plot-x-range 1 9.9\nset-plot-y-range 0 50\nset-histogram-num-bars 5" ""
+false
+"set-plot-x-range 0 9.9\nset-plot-y-range 0 50\nset-histogram-num-bars 5" ""
 PENS
 "default" 1.0 1 -16777216 true "" "histogram [pcolor] of patches"
+
+PLOT
+687
+332
+887
+482
+Nombre moyen d'individus par groupe
+Temps
+Nombre
+0.0
+100.0
+0.0
+50.0
+false
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot moyen"
 
 @#$#@#$#@
 ## WHAT IS IT?
