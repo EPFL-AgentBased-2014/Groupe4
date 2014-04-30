@@ -1,4 +1,4 @@
-breed [individus individu] ; person <-> individu?
+breed [individus individu] ; personne <-> individu?
 globals [
   taux_pollution 
   i
@@ -33,6 +33,8 @@ to go
     polluer
     demenager
     ] 
+  
+ ; ask patches [pcolor * 0.001] ;;Dépollution des cases grisées au fur et à mesure du temps
   
   tick
 end
@@ -91,21 +93,19 @@ end
 ;;POLLUTION
 to polluer
   set i i + capacite_de_pollution
-  ask patches in-radius 40 [    
-    ifelse (i >=  0)[ 
+  ask patches [    
+    if (i >  0)[ 
       ask individus [ 
-       set pcolor white - i 
-  ]
-    ][
-    
-    ]   
+       set pcolor pcolor - i 
+       ]
+    ]
   ]
 end
 
 ;;DEMENAGEMENT SUITE A LA POLLUTION
   
   to demenager
-    if (i = 0)[
+    if (i = 0)[ ;;Lorsque les cases où sont présents les individus sont trop polluées ils se déplacent sur une grande distance aléatoirement quitte à créer des nouveaux centres.
       ask individus [deplacement]
     ]
     end
@@ -222,7 +222,7 @@ capacite_de_pollution
 capacite_de_pollution
 0
 0.01
-0.0011
+0.0097
 0.0001
 1
 NIL
