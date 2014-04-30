@@ -1,30 +1,27 @@
-breed [individus individu]
+breed [individus individu] ; person <-> individu?
 
 individus-own [
   move?
   ]
 
-
 to setup
   clear-all
   reset-ticks
-  make-individus init-individus
+
   ask individus [ set move? true]
-  
   ask patches [set pcolor white]
+  
+  make-individus init-individus  
 end
 
-
 to go
-  ask individus [
+  ask individus [ 
     move 
     regroup
-    pollutate
     ] 
   
   tick
 end
-
 
 to make-individus [#n]
   set-default-shape individus "person"
@@ -33,7 +30,9 @@ to make-individus [#n]
     set-individus
     setxy random-xcor random-ycor
   ]
+  
 end
+
 
 
 
@@ -44,38 +43,29 @@ to set-individus
   set size 1
 end
 
-
-
 ;; DEPLACEMENTS
 
 to move
   if move? = true [
   rt random 360 ; rt = right turn d'un chiffre pris au hasard entre 0° et 360°
   lt random 360 ; pareil pour tourner la tête à gauche
-  ]
-  fd 1 ; forward = avance de 1
-  
+  ]  fd 1 ; forward = avance de 1
 end
-
-
 
 ;; ATTRACTION
 
 to regroup
-  let peopleISee other individus in-radius vision with [distance myself > 0.1] ; Les individus ne se regroupent que s'ils sont à une distance plus grande que 0.1 l'un de l'autre
-  
-  if count peopleISee > 0 [
+  let peopleISee other individus in-radius vision
+  print peopleISee
+    if any? peopleISee [
+      ;ask patches [set pcolor yellow]
       set heading towards one-of peopleISee
-  set move? false
-  ]
+      set move? false
+      
+    ]
+  
 end
 
-
-;; POLLUTION
-
-to pollutate
-  ask individus [set pcolor green]
-end
 
 
 @#$#@#$#@
@@ -112,7 +102,7 @@ INPUTBOX
 182
 184
 init-individus
-40
+20
 1
 0
 Number
@@ -152,12 +142,12 @@ NIL
 1
 
 INPUTBOX
-34
-216
-189
-276
+26
+206
+181
+266
 vision
-15
+2
 1
 0
 Number
