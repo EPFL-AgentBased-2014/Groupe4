@@ -2,10 +2,14 @@ breed [individus individu] ; personne <-> individu?
 globals [
   taux_pollution 
   i
+  happy
+  unhappy
+  cases_polluees
 
     ]
 individus-own [
   move?
+  regroup?
   ]
 
 patches-own []
@@ -32,6 +36,7 @@ to go
     regroup
     polluer
     demenager
+    nb_cases_polluees
     ] 
   
  ; ask patches [pcolor * 0.001] ;;Dépollution des cases grisées au fur et à mesure du temps
@@ -59,13 +64,23 @@ to set-individus
   set size 1
 end
 
-;to combien_de_voisin
- ; ask individus[count neighbors in-radius vision]
-;end
+to get-happy
+  set happy 0
+  set unhappy 0
+  
+  if regroup? = true [
+    set unhappy happy + 1
+    ]
+  set unhappy (init-individus - happy)
+end
 
-;to nombre_cases_polluees
-  ;count pactches with [patches != white
-   ; end
+to combien_de_voisin
+  ;ask individus[count in-radius vision]
+end
+
+to nb_cases_polluees
+  set cases_polluees patches with [pcolor != white]
+    end
 
 ;; DEPLACEMENTS
 
@@ -85,18 +100,30 @@ to regroup
       ;ask patches [set pcolor yellow]
       set heading towards one-of peopleISee
       set move? false
+      set regroup? true 
       
     ]
   
 end
 
 ;;POLLUTION
+;to polluer
+;  set i i + capacite_de_pollution
+;  ask patches in-radius 3 [    
+;    if (i >  0)[ 
+;      ask individus [ 
+;       set pcolor white - i 
+;       ]
+;    ]
+;  ]
+;end
+
 to polluer
   set i i + capacite_de_pollution
-  ask patches [    
-    if (i >  0)[ 
       ask individus [ 
-       set pcolor pcolor - i 
+        ask patches in-radius 3 [    
+    if (i >  0)[ 
+       set pcolor white - i 
        ]
     ]
   ]
@@ -127,7 +154,6 @@ end
   
   ;]
   
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -163,7 +189,7 @@ INPUTBOX
 853
 150
 init-individus
-1
+30
 1
 0
 Number
@@ -222,11 +248,62 @@ capacite_de_pollution
 capacite_de_pollution
 0
 0.01
-0.0097
+0.0029
 0.0001
 1
 NIL
 HORIZONTAL
+
+MONITOR
+23
+33
+80
+78
+NIL
+happy
+17
+1
+11
+
+MONITOR
+23
+82
+90
+127
+NIL
+unhappy
+17
+1
+11
+
+MONITOR
+23
+140
+192
+185
+NIL
+count cases_polluees
+17
+1
+11
+
+PLOT
+120
+260
+320
+410
+plot 1
+taux_pollution
+nombre
+0.0
+10.0
+0.0
+10.0
+true
+false
+"set-histogram-num-bars 20" ""
+PENS
+"default" 1.0 0 -16777216 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
