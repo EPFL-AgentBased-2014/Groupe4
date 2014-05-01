@@ -145,8 +145,6 @@ to happyness
   set happy-pollution count individus with [happy-pollution? = true] ;* max-pollution / 8
   set happy-regroup count individus with [happy-regroup? = true]
   set happy-centers count individus with [happy-centers? = true]
-  print happy-centers
-  print "haha"
   
   set happy (happy-regroup + happy-pollution + happy-centers) / 3
 end
@@ -197,7 +195,7 @@ to regroup
   ;; on continue à bouger aléatoirement (procédure move ci-dessous)
   ifelse any? centers in-radius centers-vision [
     let i random-float 1
-    ifelse i < influence-centers [
+    ifelse i < influence-centers / 100 [
       regroup-toward-centers
     ] [
       regroup-towards-individus
@@ -297,7 +295,7 @@ to reac-polution
     ifelse any? neighbors with [pcolor = 9.9] [
       set heading towards one-of neighbors with [pcolor = 9.9]
     ] [
-      move 2
+      move 2.5
     ] 
     ] [
     set dispersion? true
@@ -305,6 +303,19 @@ to reac-polution
   
   ;; Near black pollution 2
   let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
+  
+  ifelse black-neighbors2? [
+    ifelse any? neighbors with [pcolor = 9.9] [
+      set heading towards one-of neighbors with [pcolor = 9.9]
+    ] [
+      move 2
+    ] 
+    ] [
+    set dispersion? true
+    ]
+    
+  ;; Near black pollution 3
+  let black-neighbors3? (count neighbors with [pcolor = 0 + 3 * gradient-pollution] >= max-pollution-aleatoire)
   
   ifelse black-neighbors2? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -352,7 +363,7 @@ INPUTBOX
 143
 120
 init-individus
-200
+50
 1
 0
 Number
@@ -400,7 +411,7 @@ max-pollution
 max-pollution
 1
 8
-4
+2
 1
 1
 NIL
@@ -416,7 +427,7 @@ pollution-retention
 0
 100
 30
-5
+10
 1
 NIL
 HORIZONTAL
@@ -485,7 +496,7 @@ vision
 vision
 0
 20
-5
+10
 1
 1
 NIL
@@ -500,7 +511,7 @@ pollution-rate
 pollution-rate
 0
 100
-30
+20
 10
 1
 NIL
@@ -549,13 +560,13 @@ PLOT
 17
 888
 208
-Happyness regroup - pollution
-happy-regroup
-happy-pollution
+Happyness   regroup - pollution
+% regroup
+% pollution
 0.0
-10.0
+101.0
 0.0
-10.0
+101.0
 true
 false
 "" ""
@@ -569,7 +580,7 @@ SWITCH
 335
 centers?
 centers?
-0
+1
 1
 -1000
 
@@ -597,7 +608,7 @@ centers-vision
 centers-vision
 0
 40
-15
+20
 1
 1
 NIL
@@ -611,9 +622,9 @@ SLIDER
 influence-centers
 influence-centers
 0
-1
-0.4
-0.1
+100
+70
+10
 1
 NIL
 HORIZONTAL
@@ -642,12 +653,12 @@ PLOT
 1099
 208
 Happyness   regroup - centers
-happy-regroup
-happy-centers
+% regroup
+% centers
 0.0
-10.0
+101.0
 0.0
-10.0
+101.0
 true
 false
 "" ""
@@ -659,13 +670,13 @@ PLOT
 18
 1312
 208
-Happyness  centers - pollution
-centers
-pollution
+Happyness   centers - pollution
+% centers
+% pollution
 0.0
-10.0
+101.0
 0.0
-10.0
+101.0
 true
 false
 "" ""
