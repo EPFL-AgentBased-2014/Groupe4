@@ -39,7 +39,7 @@ to setup
   
 ;  set gradient-pollution 9.9 / pollution-rate
   set moyen 0
-  set pollution_subie 0
+ ; set pollution_subie 0
   
   set happy 0
   set unhappy 0
@@ -184,7 +184,7 @@ to decontaminate
 end
 
 to compter_pollution
-  ask individus pcolor 
+  ;ask individus pcolor 
 end
 
 
@@ -332,7 +332,7 @@ INPUTBOX
 99
 227
 init-individus
-30
+100
 1
 0
 Number
@@ -408,7 +408,7 @@ max-pollution
 max-pollution
 1
 8
-3
+2
 1
 1
 NIL
@@ -423,7 +423,7 @@ pollution-retention
 pollution-retention
 1
 100
-34
+14
 1
 1
 NIL
@@ -459,11 +459,12 @@ Nombre de cellules polluées
 10.0
 0.0
 100.0
-true
 false
-"set-plot-x-range -9.9 0\nset-plot-y-range 0 50\nset-histogram-num-bars 5" ""
+true
+"set-plot-x-range -9.9 0\nset-plot-y-range 0 50\nset-histogram-num-bars 100" ""
 PENS
-"" 1.0 1 -16777216 true "" "histogram [pcolor * -1] of patches"
+"Total" 0.1 1 -16777216 true "" "histogram [pcolor * (-1)] of patches"
+"Individus" 0.1 1 -5298144 true "" "histogram [pcolor * (-1)] of patches with [any? individus-here]"
 
 PLOT
 797
@@ -492,7 +493,7 @@ vision
 vision
 0
 20
-4
+3
 1
 1
 NIL
@@ -507,7 +508,7 @@ pollution-rate
 pollution-rate
 0
 100
-15
+35
 5
 1
 NIL
