@@ -59,27 +59,18 @@ to go
     move 1
     pollutate
     reac-polution
-;    set happy-regroup count individus with [happy-regroup? = true]
-;    set happy-pollution count individus with [happy-pollution? = true]
     compter_voisins
     ] 
-      
-;  ifelse happy-regroup <= happy-pollution [
-;    set happy happy-regroup
-;    ] [
-;    set happy happy-pollution
-;    ]
-      
+       
   ask patches [
     if pcolor != 9.9 [
       decontaminate
     ] 
     
-;    perturbation
     set pollution pcolor
     ]
   
-  hapiness
+  happyness
   
   set pc_pollution ( 1 - (( mean [pollution] of patches ) / 9.9 )) * 100
   set moyen mean [voisins] of individus
@@ -226,7 +217,7 @@ end
 
 ;; INDIVIDU HAPINESS
 
-to hapiness
+to happyness
   ask individus [
     ifelse pcolor != 9.9 [
       set happy-pollution? false
