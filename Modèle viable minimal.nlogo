@@ -29,7 +29,7 @@ to setup
   reset-ticks
   make-individus init-individus
   
-  set gradient-pollution 9.9 / 20
+;  set gradient-pollution 9.9 / pollution-rate
   set moyen 0
   
 ;  set happy 0
@@ -43,11 +43,16 @@ to setup
     
     ]
   
-  ask patches [set pcolor 9.9]
+  ask patches [
+    set pcolor 9.9
+    ]
 end
 
 
 to go 
+  
+  set gradient-pollution 9.9 / (pollution-rate + 1)
+  
   ask individus [
     regroup
     move 1
@@ -59,8 +64,11 @@ to go
     ] 
   
   ask patches [
-    if pcolor != 9.9 [
+    if pcolor != 9.9[
       decontaminate
+    ] 
+    if pcolor = red [
+      
     ]
     set pollution pcolor
     ]
@@ -206,11 +214,22 @@ to reac-polution
     ] [
     set dispersion? true
     ]
-  
-  
 end
 
 
+
+;; Perturbation extérieure
+;; Intéraction avec la souris
+
+to perturbation
+  while [mouse-down?]
+    [
+      ask patch mouse-xcor mouse-ycor [
+        set pcolor red
+      ]
+      display
+    ]  
+end
 
 
 
@@ -248,12 +267,12 @@ ticks
 30.0
 
 INPUTBOX
-30
-197
-185
-257
+11
+174
+109
+234
 init-individus
-10
+1000
 1
 0
 Number
@@ -304,10 +323,10 @@ happy
 11
 
 BUTTON
-69
-116
-132
-149
+26
+98
+89
+131
 NIL
 go
 NIL
@@ -329,7 +348,7 @@ max-pollution
 max-pollution
 1
 8
-4
+5
 1
 1
 NIL
@@ -344,7 +363,7 @@ pollution-retention
 pollution-retention
 1
 100
-76
+1
 1
 1
 NIL
@@ -413,11 +432,43 @@ vision
 vision
 0
 20
-7
+20
 1
 1
 NIL
 HORIZONTAL
+
+SLIDER
+13
+254
+185
+287
+pollution-rate
+pollution-rate
+0
+100
+10
+5
+1
+NIL
+HORIZONTAL
+
+BUTTON
+95
+99
+205
+132
+NIL
+perturbation
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
