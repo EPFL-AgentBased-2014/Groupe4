@@ -57,7 +57,7 @@ end
 
 
 to go 
-  
+  ;; 
   set gradient-pollution 9.9 * (0.001 * pollution-rate)
   
   ask individus [
@@ -173,17 +173,6 @@ to set-centers
 end
 
 
-;to make-attraction-centers
-;  ;; On consacre un patch par par centre d'intérêt
-;  if attraction-centers? = true [
-;    ask n-of init-attractions-centers patches 
-;    [
-;      set pcolor blue
-;    ]
-;  ]
-;end
-
-
 
 ;; ------------------------------------------------------
 ;; DEPLACEMENTS INFDIVIDUS
@@ -227,7 +216,7 @@ to regroup-towards-individus
       set heading towards one-of peopleISee
       set move? false
       set regroup? true
-;;set dispersion? false ???;; ------------------------------------------------------
+      set dispersion? false
       set happy-regroup? true
       ] [
       set move? true
@@ -363,7 +352,7 @@ INPUTBOX
 143
 120
 init-individus
-100
+200
 1
 0
 Number
@@ -426,7 +415,7 @@ pollution-retention
 pollution-retention
 0
 100
-20
+30
 5
 1
 NIL
