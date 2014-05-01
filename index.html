@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>La sociabilité face à ses nuisances by EPFL-AgentBased-2014</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>La sociabilité face à ses nuisances</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/EPFL-AgentBased-2014/Groupe4">View the Project on GitHub <small>EPFL-AgentBased-2014/Groupe4</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/EPFL-AgentBased-2014/Groupe4/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/EPFL-AgentBased-2014/Groupe4/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/EPFL-AgentBased-2014/Groupe4">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>Nous sommes partis de la volonté de confronter un agent à un dilemme : dans quelle mesure tel individu se regroupera avec d'autres pour accroitre son bonheur sachant que ce regroupement sera pour lui une exposition à certaines nuisances. Il s'agit donc d'analyser le compromis que chaque individu fait pour maximiser son bonheur. Cette analyse aura une dimension géométrique lorsqu'il s'agira de dégager des formes de groupement humain types mais elle sera aussi une étude des causalités lorsqu'il s'agira de déterminer la capacité rétroactive de la pollution produite par les individus. 
+Ce modèle peut aussi être lu comme une utilisation  de ressources limitées dans le temps par un groupement nomade se déplaçant librement sur un territoire.</p>
+
+<h2>
+<a name="hypoth%C3%A8ses" class="anchor" href="#hypoth%C3%A8ses"><span class="octicon octicon-link"></span></a>Hypothèses</h2>
+
+<ul>
+<li>Un regroupement de personnes est un phénomène émergent</li>
+<li>Tout individu crée des nuisances, celles-ci sont plus importantes s'il est dans un groupe</li>
+<li>Tout individu veut se socialiser</li>
+<li>Tout individu fuit de trop importantes nuisances</li>
+</ul><h2>
+<a name="elements" class="anchor" href="#elements"><span class="octicon octicon-link"></span></a>Elements</h2>
+
+<p>Les cellules sont des parcelles de terrain occupées à loisir par les agents. Ceux ci sont des individus sans spécificité qui les différencie. Un autre type d'agent est le centre d'intérêt qui attire dans une certaine mesure les individus.</p>
+
+<h2>
+<a name="param%C3%A8tres" class="anchor" href="#param%C3%A8tres"><span class="octicon octicon-link"></span></a>Paramètres</h2>
+
+<p>Le paramètre agissant sur les cellules est :</p>
+
+<ul>
+<li>leur capacité à se dépolluer
+Les paramètres agissant sur les individus sont :</li>
+<li>leur capacité à polluer</li>
+<li>leur nombre</li>
+<li>leur capacité à se constituer comme groupe</li>
+<li>leur sensibilité à la pollution</li>
+<li>l'attractivité du centre d'intérêt.</li>
+</ul><h2>
+<a name="proc%C3%A9dure" class="anchor" href="#proc%C3%A9dure"><span class="octicon octicon-link"></span></a>Procédure</h2>
+
+<h2>
+<a name="r%C3%A9sultats-et-remarques" class="anchor" href="#r%C3%A9sultats-et-remarques"><span class="octicon octicon-link"></span></a>Résultats et remarques</h2>
+
+<p>Visuellement nous observons que la taille des groupes est fonction de:
+-leur sensibilité à la pollution. Les groupes sont plus compacts si les individus sont moins sensible aux nuisances des autres, ce qui était prévisible.
+-la pollution environnante. En effet, lorsque le sol est pollué aucune stabilité est à dénoter, les individus sont isolés et se déplacent en couvrant tout l'espace. Au contraire, passé un certain seuil (dépendant de la pollution et de la "vision") des groupes se forment quasi instantanément qui sont d'autant plus gros que la "vision" des individus en bonne.
+On observe aussi de fortes oscillations cycliques dans le nombre d'individus moyen par groupe lorsque ce dernier est important. Un groupe important est donc moins soudé qu'un petit groupe. Outre la susdite variation qui a une période courte nous observons la présence de cycles sur une plus longue période. En effet, des pics de densité se répètent à intervalles réguliers pour se défaire aussi rapidement.
+Enfin, on observe un phénomène de respiration : lorsqu'un groupe pollue son centre, les individus ont tendance à se placer en périphérie le temps que le centre se dépollue, puis ils réinvestissent leur précédent emplacement et ainsi de suite.</p>
+
+<h2>
+<a name="analogies-et-conclusions" class="anchor" href="#analogies-et-conclusions"><span class="octicon octicon-link"></span></a>Analogies et conclusions</h2>
+
+<p>Vis à vis de l'ensemble de la plateforme nous pouvons affirmer que la création de groupes compacts est moins destructrice que l'éparpillement de petits groupes d'individus qui certes polluent moins mais polluent sur une plus grande surface. Ce second comportement peut être comparé au phénomène de péri-urbanisation ou à celui des "maisons de campagne" qui par leur dispersement ont un impact plus important sur l'environnement que les villes denses.
+L'introduction de centres d'intérêts corrobore cette affirmation : en fixant la population à un endroit donné la pollution générale diminue de plus de moitié.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/EPFL-AgentBased-2014">EPFL-AgentBased-2014</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
