@@ -8,7 +8,10 @@ globals [
   ]
 
 
-breed [individus individu]
+breed [individus individu
+  ]
+;breed [centres_interets centre_interet
+ ; ]
 
 
 individus-own [
@@ -17,6 +20,7 @@ individus-own [
   dispersion?
   happy?
   voisins
+  pollution_subie
   ]
 
 
@@ -31,12 +35,14 @@ to setup
   clear-all
   reset-ticks
   make-individus init-individus
+  ;make-centres_interets init-centres_interets
   
 ;  set gradient-pollution 9.9 / pollution-rate
   set moyen 0
+  set pollution_subie 0
   
-;  set happy 0
-;  set unhappy 0
+  set happy 0
+  set unhappy 0
   
   ask individus [
     set move? true
@@ -54,7 +60,7 @@ end
 
 to go 
   
-  set gradient-pollution 9.9 / (pollution-rate + 1)
+  set gradient-pollution 9.9 * (pollution-rate * 0.001)
   
   ask individus [
     regroup
@@ -62,8 +68,9 @@ to go
     pollutate
     reac-polution
     compter_voisins
-    
-;    get-happy
+    ;converger_vers_centre
+    compter_pollution
+    get-happy
     ] 
   
   ask patches [
@@ -93,15 +100,15 @@ to make-individus [#n]
 end
 
 
-;to get-happy
-;  set happy 0
-;  set unhappy 0
-;  
-;  if regroup? = true [
-;    set unhappy happy + 1
-;    ]
-;  set unhappy (init-individus - happy)
-;end
+
+to get-happy
+  
+  
+  if regroup? = true [
+    set unhappy happy + 1
+    ]
+  set unhappy (init-individus - happy)
+end
 
 
 
@@ -176,6 +183,10 @@ to decontaminate
   ]
 end
 
+to compter_pollution
+  ask individus pcolor 
+end
+
 
 
 ;; REACTION POLLUTION
@@ -184,7 +195,7 @@ to reac-polution
   ;; Black pollution
   let max-pollution-aleatoire random max-pollution
   
-  let black-neighbors? (count neighbors with [pcolor = 0] >= max-pollution-aleatoire)
+  let black-neighbors? (count neighbors in-radius 1 with [pcolor = 0] >= max-pollution-aleatoire)
   
   ifelse black-neighbors? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -197,7 +208,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 1
-  let black-neighbors1? (count neighbors with [pcolor = 0 + gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors1? (count neighbors in-radius 1 with [pcolor = 0 + gradient-pollution] >= max-pollution-aleatoire)
   
   ifelse black-neighbors1? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -210,7 +221,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 2
-  let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors2? (count neighbors in-radius 1 with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
   
   ifelse black-neighbors2? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -239,6 +250,49 @@ to perturbation
 end
 
 
+;;CENTRES D'INTERÊTS
+
+;to set-centres_interets
+ ; set color red
+  ;set size 2
+;end
+
+;to make-centres_interets [$n]
+ ; set-default-shape centres_interets "target"
+  ;create-centres_interets $n
+   ; [ 
+    ;set-centres_interets
+    ;setxy random-xcor random-ycor
+    ;]
+;end
+
+;to converger_vers_centre ;;On abandonne l'idée du centre d'intérêt car on n'observe pas une convergence car les individus on déjà beaucoup de raisons de se déplacer, et une supplémentaire ne change pas la donne
+ ; ask individus [
+  ;  if any? centres_interets in-radius 1000 [
+   ;   set heading towards one-of centres_interets
+      
+    ;]
+   ;]
+;end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -248,11 +302,11 @@ end
 GRAPHICS-WINDOW
 210
 10
-781
-602
+738
+559
 16
 16
-17.0
+15.7
 1
 10
 1
@@ -273,12 +327,12 @@ ticks
 30.0
 
 INPUTBOX
-11
-174
-109
-234
+1
+167
+99
+227
 init-individus
-200
+30
 1
 0
 Number
@@ -354,7 +408,7 @@ max-pollution
 max-pollution
 1
 8
-6
+3
 1
 1
 NIL
@@ -369,17 +423,17 @@ pollution-retention
 pollution-retention
 1
 100
-5
+34
 1
 1
 NIL
 HORIZONTAL
 
 PLOT
-1085
-70
-1347
-253
+1033
+84
+1230
+237
 Pourcentage de pollution
 Temps
 Pollution
@@ -396,8 +450,8 @@ PENS
 PLOT
 796
 69
-1070
-252
+1030
+241
 Taux de pollution
 Pollution
 Nombre de cellules polluées
@@ -407,16 +461,16 @@ Nombre de cellules polluées
 100.0
 true
 false
-"set-plot-x-range 0 9.9\nset-plot-y-range 0 50\nset-histogram-num-bars 5" ""
+"set-plot-x-range -9.9 0\nset-plot-y-range 0 50\nset-histogram-num-bars 5" ""
 PENS
-"default" 1.0 1 -16777216 true "" "histogram [pcolor] of patches"
+"" 1.0 1 -16777216 true "" "histogram [pcolor * -1] of patches"
 
 PLOT
 797
 257
-1351
-532
-Nombre moyen d'individus par groupe
+1219
+535
+Nombre moyen de voisins
 temps
 nombre
 0.0
@@ -438,7 +492,7 @@ vision
 vision
 0
 20
-5
+4
 1
 1
 NIL
@@ -453,7 +507,7 @@ pollution-rate
 pollution-rate
 0
 100
-60
+15
 5
 1
 NIL
