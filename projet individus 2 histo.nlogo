@@ -102,7 +102,7 @@ to set-individus
 end
 
 to compter_voisins
-  set voisins count individus in-radius vision
+  set voisins count individus in-radius 5
   ;show nombre_voisins_moyen
 
 end
@@ -205,7 +205,7 @@ INPUTBOX
 185
 257
 init-individus
-100
+50
 1
 0
 Number
@@ -250,7 +250,7 @@ INPUTBOX
 185
 321
 vision
-5
+20
 1
 0
 Number
@@ -374,8 +374,8 @@ Nombre
 0.0
 100.0
 0.0
-50.0
-false
+100.0
+true
 false
 "" ""
 PENS
