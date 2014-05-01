@@ -5,11 +5,13 @@ globals [
   moyen
   happy-regroup
   happy-pollution
+  happy-centers
   happy
   ]
 
 
 breed [individus individu]
+breed [centers center]
 
 
 individus-own [
@@ -18,6 +20,7 @@ individus-own [
   dispersion?
   happy-regroup?
   happy-pollution?
+  happy-centers?
   near-polluted
   voisins
   ]
@@ -31,10 +34,11 @@ patches-own [
 
 
 to setup
+  ;; Définition des paramètres initiaux
   clear-all
   reset-ticks
   make-individus init-individus
-  
+  if centers? [make-centers init-centers]
   set moyen 0
   
   ask individus [
@@ -43,6 +47,7 @@ to setup
     set dispersion? false
     set happy-regroup? false
     set happy-pollution? false
+    set happy-centers? false
     ]
   
   ask patches [
@@ -80,7 +85,15 @@ to go
 end
 
 
+;; ------------------------------------------------------
+;; PCROCEDURES GENERALES
+;; ------------------------------------------------------
+
+
+;; INDIVIDUS
+
 to make-individus [#n]
+  ;; Créer des individus
   set-default-shape individus "person"
   create-individus #n 
     [ 
@@ -89,20 +102,25 @@ to make-individus [#n]
     ]
 end
 
-;; INDIVIDUS
 
 to set-individus
+  ;; Définit la taille et la couleur des individus
   set color green
   set size 1
 end
 
 
 to compter_voisins
+  ;; Détermine le nombre d'individus voisins pour un individu donné et dans un rayon donné
   set voisins count individus in-radius 5
 end
 
 
 to happyness
+  ;; Rapporte si l'individu est heureux ou non
+  ;; Il est heureux s'il trouve un individus dans son rayon de vision et
+  ;; s'il se trouve sur une cellule dont les voisines ne sont pas toutes polluées (en fonction du
+  ;; seuil de tolérance fixé dans l'interface)
   ask individus [
     set near-polluted count neighbors with [pcolor <= ( 2 * gradient-pollution)]
     
@@ -116,41 +134,100 @@ to happyness
       ] [
       set happy-regroup? false
       ]
+    ifelse any? centers in-radius vision [ ; On devient heureux si on est aussi proche d'un centre que l'on souhaîte être proche d'un individu
+      set happy-centers? true
+;      let happy-centers-dist distance myself one-of centers
+;      set happpy-centers happy-centers + happy-centers
+      ] [
+      set happy-centers? false
+      ]
     ]
   set happy-pollution count individus with [happy-pollution? = true] ;* max-pollution / 8
   set happy-regroup count individus with [happy-regroup? = true]
+  set happy-centers count individus with [happy-centers? = true]
+  print happy-centers
+  print "haha"
   
-  set happy  (happy-regroup + happy-pollution) / 2  
+  set happy (happy-regroup + happy-pollution + happy-centers) / 3
 end
 
 
+;; ------------------------------------------------------
+;; CENTERS
 
-;; DEPLACEMENTS
+to make-centers [#n]
+  ;; Création et mise en forme des centres d'intérets
+  set-default-shape centers "flag"
+  create-centers #n
+  [
+   set-centers
+   setxy random-xcor random-ycor 
+  ]
+end
+
+
+to set-centers
+  ;; On définit la couleur et la taille des centres d'intérêts
+  set color red
+  set size 1
+end
+
+
+;to make-attraction-centers
+;  ;; On consacre un patch par par centre d'intérêt
+;  if attraction-centers? = true [
+;    ask n-of init-attractions-centers patches 
+;    [
+;      set pcolor blue
+;    ]
+;  ]
+;end
+
+
+
+;; ------------------------------------------------------
+;; DEPLACEMENTS INFDIVIDUS
 
 to move [x]
+  ;; Si nous n'avons pas repéré d'individus dans notre rayon de vision, alors on continue à se déplacer
+  ;; de façon aléatoire
   if move? = true or dispersion? = true [
-    rt random 360 ; rt = right turn d'un chiffre pris au hasard entre 0° et 360°
-    lt random 360 ; pareil pour tourner la tête à gauche
+    rt random 360
+    lt random 360
   ]
-  fd x ; forward = avance de 1
+  fd x
 end
 
 
 
 ;; ATTRACTION
-;; On tente cette procédure à chaque tick
 
 to regroup
-  
-  set happy 0
-  
+  ;; On tente cette procédure à chaque tick
+  ;; Si on trouve au moins un individu ou un centre d'intérêt dans notre rayon de vision, alors on s'en raproche. Sinon
+  ;; on continue à bouger aléatoirement (procédure move ci-dessous)
+  ifelse any? centers in-radius centers-vision [
+    let i random-float 1
+    ifelse i < influence-centers [
+      regroup-toward-centers
+    ] [
+      regroup-towards-individus
+    ]
+  ] [
+    regroup-towards-individus
+  ]
+end
+
+
+to regroup-towards-individus
+  ;; Procédure pour se rapprocher des individus
   let peopleISee other individus in-radius vision with [distance myself > 0.1] ; Les individus ne se regroupent que s'ils sont à une distance plus grande que 0.1 l'un de l'autre
   
   ifelse count peopleISee > 0 [
       set heading towards one-of peopleISee
       set move? false
       set regroup? true
-      set dispersion? false
+;;set dispersion? false ???;; ------------------------------------------------------
       set happy-regroup? true
       ] [
       set move? true
@@ -160,7 +237,21 @@ to regroup
 end
 
 
+to regroup-toward-centers
+  ;; Procédure pour se rapprocher des individus
+  let centerISee centers in-radius centers-vision
+  
+  if count centerISee > 0 [
+    set heading towards one-of centerISee
+    set move? false
+    set regroup? true
+    set dispersion? false
+  ]
+end
 
+
+
+;; ------------------------------------------------------
 ;; POLLUTION
 
 to pollutate
@@ -176,6 +267,7 @@ end
 
 
 to decontaminate
+  ;; Décolorer les cases après le passage d'un individu
   set t t - 1
   let newvalue pcolor + gradient-pollution
   if t <= 0 [
@@ -188,7 +280,7 @@ to decontaminate
 end
 
 
-
+;; ------------------------------------------------------
 ;; REACTION POLLUTION
 
 to reac-polution
@@ -272,7 +364,7 @@ INPUTBOX
 144
 176
 init-individus
-200
+100
 1
 0
 Number
@@ -335,7 +427,7 @@ pollution-retention
 pollution-retention
 0
 100
-0
+15
 5
 1
 NIL
@@ -405,7 +497,7 @@ vision
 vision
 0
 20
-0
+2
 1
 1
 NIL
@@ -420,7 +512,7 @@ pollution-rate
 pollution-rate
 0
 100
-0
+30
 10
 1
 NIL
@@ -445,6 +537,7 @@ PENS
 "Happy" 1.0 0 -16777216 true "" "plot happy / init-individus * 100"
 "Happy-regroup" 1.0 0 -2674135 true "" "plot happy-regroup / init-individus * 100"
 "Happy-pollution" 1.0 0 -13791810 true "" "plot happy-pollution / init-individus * 100"
+"Happy-centers" 1.0 0 -13840069 true "" "plot happy-centers / init-individus * 100"
 
 PLOT
 921
@@ -473,6 +566,80 @@ Happyness
 Happy-regroup
 Happy-pollution
 0.0
+100.0
+0.0
+100.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plotxy happy-regroup / init-individus * 100 happy-pollution / init-individus * 100"
+
+SWITCH
+17
+399
+126
+432
+centers?
+centers?
+0
+1
+-1000
+
+SLIDER
+29
+448
+201
+481
+init-centers
+init-centers
+1
+10
+6
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+682
+475
+854
+508
+centers-vision
+centers-vision
+0
+40
+16
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+687
+445
+859
+478
+influence-centers
+influence-centers
+0
+1
+0.1
+0.1
+1
+NIL
+HORIZONTAL
+
+PLOT
+869
+335
+1069
+485
+Happyness
+tick
+% happy
+0.0
 10.0
 0.0
 10.0
@@ -480,7 +647,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plotxy happy-regroup / init-individus * 100 happy-pollution / init-individus * 100"
+"Happy" 1.0 0 -16777216 true "" "plot happy / init-individus * 100"
 
 @#$#@#$#@
 ## WHAT IS IT?
