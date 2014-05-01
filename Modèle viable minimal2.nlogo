@@ -1,26 +1,24 @@
 globals [
-  happy
-  unhappy
   gradient-pollution
   pc_pollution
   nombre_voisins_moyen
   moyen
+  happy-regroup
+  happy-pollution
+  happy
   ]
 
 
-breed [individus individu
-  ]
-;breed [centres_interets centre_interet
- ; ]
+breed [individus individu]
 
 
 individus-own [
   move?
   regroup?
   dispersion?
-  happy?
+  happy-regroup?
+  happy-pollution?
   voisins
-  pollution_subie
   ]
 
 
@@ -35,21 +33,22 @@ to setup
   clear-all
   reset-ticks
   make-individus init-individus
-  ;make-centres_interets init-centres_interets
   
-;  set gradient-pollution 9.9 / pollution-rate
   set moyen 0
+<<<<<<< HEAD
  ; set pollution_subie 0
   
   set happy 0
   set unhappy 0
+=======
+>>>>>>> FETCH_HEAD
   
   ask individus [
     set move? true
     set regroup? false
     set dispersion? false
-    set happy? false
-    
+    set happy-regroup? false
+    set happy-pollution? false
     ]
   
   ask patches [
@@ -67,21 +66,27 @@ to go
     move 1
     pollutate
     reac-polution
+;    set happy-regroup count individus with [happy-regroup? = true]
+;    set happy-pollution count individus with [happy-pollution? = true]
     compter_voisins
-    ;converger_vers_centre
-    compter_pollution
-    get-happy
     ] 
-  
+      
+;  ifelse happy-regroup <= happy-pollution [
+;    set happy happy-regroup
+;    ] [
+;    set happy happy-pollution
+;    ]
+      
   ask patches [
-    if pcolor != 9.9 or pcolor != red [
+    if pcolor != 9.9 [
       decontaminate
     ] 
-    if pcolor = red [
-      
-    ]
+    
+;    perturbation
     set pollution pcolor
     ]
+  
+  hapiness
   
   set pc_pollution ( 1 - (( mean [pollution] of patches ) / 9.9 )) * 100
   set moyen mean [voisins] of individus
@@ -98,19 +103,6 @@ to make-individus [#n]
     setxy random-xcor random-ycor
     ]
 end
-
-
-
-to get-happy
-  
-  
-  if regroup? = true [
-    set unhappy happy + 1
-    ]
-  set unhappy (init-individus - happy)
-end
-
-
 
 ;; INDIVIDUS
 
@@ -139,8 +131,12 @@ end
 
 
 ;; ATTRACTION
+;; On tente cette procédure à chaque tick
 
 to regroup
+  
+  set happy 0
+  
   let peopleISee other individus in-radius vision with [distance myself > 0.1] ; Les individus ne se regroupent que s'ils sont à une distance plus grande que 0.1 l'un de l'autre
   
   ifelse count peopleISee > 0 [
@@ -148,10 +144,12 @@ to regroup
       set move? false
       set regroup? true
       set dispersion? false
-    ] [
-    set move? true
-    set regroup? false
-    ]
+      set happy-regroup? true
+      ] [
+      set move? true
+      set regroup? false
+      set happy-regroup? false
+      ]
 end
 
 
@@ -166,7 +164,7 @@ to pollutate
     ] [
     set pcolor 0
     ]
-  set t pollution-retention
+  set t pollution-retention / 5
 end
 
 
@@ -175,18 +173,21 @@ to decontaminate
   let newvalue pcolor + gradient-pollution
   if t <= 0 
   [
-  ifelse newvalue < 9.9 [
-    set pcolor pcolor + gradient-pollution
+  ifelse newvalue < 8.9 [
+    set pcolor pcolor + 1 ;+ gradient-pollution
     ] [
     set pcolor 9.9
     ]
   ]
 end
 
+<<<<<<< HEAD
 to compter_pollution
   ;ask individus pcolor 
 end
 
+=======
+>>>>>>> FETCH_HEAD
 
 
 ;; REACTION POLLUTION
@@ -195,7 +196,9 @@ to reac-polution
   ;; Black pollution
   let max-pollution-aleatoire random max-pollution
   
-  let black-neighbors? (count neighbors in-radius 1 with [pcolor = 0] >= max-pollution-aleatoire)
+  let black-neighbors? (count neighbors with [pcolor = 0] >= max-pollution-aleatoire)
+  
+  ifelse black-neighbors? [set happy-pollution? false] [set happy-pollution? true]
   
   ifelse black-neighbors? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -208,7 +211,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 1
-  let black-neighbors1? (count neighbors in-radius 1 with [pcolor = 0 + gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors1? (count neighbors with [pcolor = 0 + gradient-pollution] >= max-pollution-aleatoire)
   
   ifelse black-neighbors1? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -221,7 +224,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 2
-  let black-neighbors2? (count neighbors in-radius 1 with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
   
   ifelse black-neighbors2? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -235,64 +238,31 @@ to reac-polution
 end
 
 
+;; INDIVIDU HAPINESS
 
-;; Perturbation extérieure
-;; Intéraction avec la souris
-
-to perturbation
-  while [mouse-down?]
-    [
-      ask patch mouse-xcor mouse-ycor [
-        set pcolor red
+to hapiness
+  ask individus [
+    ifelse pcolor != 9.9 [
+      set happy-pollution? false
+      ] [
+      set happy-pollution? true
       ]
-      display
-    ]  
+    ifelse any? individus in-radius vision [
+      set happy-regroup? true
+      ] [
+      set happy-regroup? false
+      ]
+    ]
+  set happy-pollution count individus with [happy-pollution? = true]
+  set happy-regroup count individus with [happy-regroup? = true]
+  
+  ifelse happy-pollution <= happy-regroup [
+    set happy happy-pollution
+    ] [
+    set happy happy-regroup
+    ]
+  
 end
-
-
-;;CENTRES D'INTERÊTS
-
-;to set-centres_interets
- ; set color red
-  ;set size 2
-;end
-
-;to make-centres_interets [$n]
- ; set-default-shape centres_interets "target"
-  ;create-centres_interets $n
-   ; [ 
-    ;set-centres_interets
-    ;setxy random-xcor random-ycor
-    ;]
-;end
-
-;to converger_vers_centre ;;On abandonne l'idée du centre d'intérêt car on n'observe pas une convergence car les individus on déjà beaucoup de raisons de se déplacer, et une supplémentaire ne change pas la donne
- ; ask individus [
-  ;  if any? centres_interets in-radius 1000 [
-   ;   set heading towards one-of centres_interets
-      
-    ;]
-   ;]
-;end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -302,11 +272,11 @@ end
 GRAPHICS-WINDOW
 210
 10
-738
-559
+781
+602
 16
 16
-15.7
+17.0
 1
 10
 1
@@ -327,12 +297,16 @@ ticks
 30.0
 
 INPUTBOX
-1
-167
-99
-227
+11
+174
+109
+234
 init-individus
+<<<<<<< HEAD
 100
+=======
+300
+>>>>>>> FETCH_HEAD
 1
 0
 Number
@@ -370,17 +344,6 @@ NIL
 NIL
 NIL
 1
-
-MONITOR
-27
-481
-84
-526
-happy
-happy
-17
-1
-11
 
 BUTTON
 26
@@ -421,21 +384,26 @@ SLIDER
 439
 pollution-retention
 pollution-retention
-1
+0
 100
+<<<<<<< HEAD
 14
 1
+=======
+30
+5
+>>>>>>> FETCH_HEAD
 1
 NIL
 HORIZONTAL
 
 PLOT
-1033
-84
-1230
-237
+1016
+10
+1260
+247
 Pourcentage de pollution
-Temps
+tick
 Pollution
 0.0
 100.0
@@ -448,10 +416,10 @@ PENS
 "pc_pollution" 1.0 0 -16777216 true "" "plot pc_pollution"
 
 PLOT
-796
-69
-1030
-241
+792
+10
+1013
+248
 Taux de pollution
 Pollution
 Nombre de cellules polluées
@@ -464,15 +432,19 @@ true
 "set-plot-x-range -9.9 0\nset-plot-y-range 0 50\nset-histogram-num-bars 100" ""
 PENS
 "Total" 0.1 1 -16777216 true "" "histogram [pcolor * (-1)] of patches"
+<<<<<<< HEAD
 "Individus" 0.1 1 -5298144 true "" "histogram [pcolor * (-1)] of patches with [any? individus-here]"
+=======
+"Individus" 0.1 1 -8053223 true "" "histogram [pcolor * (-1)] of patches with [any? individus-here]"
+>>>>>>> FETCH_HEAD
 
 PLOT
 797
 257
-1219
-535
-Nombre moyen de voisins
-temps
+1264
+437
+Nombre moyen d'individus par groupe
+tick
 nombre
 0.0
 100.0
@@ -493,7 +465,11 @@ vision
 vision
 0
 20
+<<<<<<< HEAD
 3
+=======
+20
+>>>>>>> FETCH_HEAD
 1
 1
 NIL
@@ -508,28 +484,33 @@ pollution-rate
 pollution-rate
 0
 100
+<<<<<<< HEAD
 35
+=======
+30
+>>>>>>> FETCH_HEAD
 5
 1
 NIL
 HORIZONTAL
 
-BUTTON
-95
-99
-205
-132
-NIL
-perturbation
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
+PLOT
+798
+445
+1266
+595
+Happyness
+tick
+happy
+0.0
+10.0
+0.0
+100.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot happy / init-individus * 100"
 
 @#$#@#$#@
 ## WHAT IS IT?

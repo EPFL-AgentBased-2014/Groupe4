@@ -14,9 +14,6 @@ breed [centers center]
 individus-own [
   move?
   regroup?
-; regroup-towards-individus?
-; regroup-towards-centers?
-; probability-to-regroup?
   dispersion?
   happy?
   voisins
@@ -39,9 +36,6 @@ to setup
   if centers? [make-centers init-centers]
   
   set moyen 0
-; set gradient-pollution 9.9 / pollution-rate  
-; set happy 0
-; set unhappy 0
   
   ask individus [
     set move? true
@@ -62,8 +56,6 @@ end
 to go 
   
   set gradient-pollution 9.9 / (pollution-rate + 1)
-; set probability-to-regroup? true if [
-    
   
   ask individus [
     
@@ -73,8 +65,8 @@ to go
     reac-polution
     compter_voisins
     
-;    get-happy
     ] 
+  
   
   ask patches [
     if pcolor != 9.9[
@@ -85,6 +77,7 @@ to go
     ]
     set pollution pcolor
     ]
+  
   
   set pc_pollution ( 1 - (( mean [pollution] of patches ) / 9.9 )) * 100
   set moyen mean [voisins] of individus
@@ -159,7 +152,7 @@ end
 ;; PROCEDURES CENTRES
 
 to set-centers
-  set color violet - 1
+  set color red - 1
   set size 1  
 end
 
@@ -200,7 +193,7 @@ to regroup
      regroup-towards-individus
      ] 
    ] [
-   regroup 
+   regroup-towards-individus
    ]
 ;proc de regroupement genérale appelée par les individus:
 ;si dans le rayon d'attraction des centres (la valeur de ce rayon est une globale ds l'interface) l'individu voit un centre
@@ -315,16 +308,15 @@ end
 ;; Perturbation extérieure
 ;; Intéraction avec la souris
 
-to perturbation
-  while [mouse-down?]
-    [
-      ask patch mouse-xcor mouse-ycor [
-        set pcolor red
-      ]
-      display
-    ]  
-end
-
+;to perturbation
+;  while [mouse-down?]
+;    [
+;      ask patch mouse-xcor mouse-ycor [
+;        set pcolor red
+;      ]
+;      display
+;    ]  
+;end
 
 
 
@@ -364,7 +356,7 @@ INPUTBOX
 109
 234
 init-individus
-10
+100
 1
 0
 Number
@@ -415,10 +407,10 @@ happy
 11
 
 BUTTON
-26
-98
-89
-131
+125
+94
+188
+127
 NIL
 go
 NIL
@@ -440,7 +432,7 @@ max-pollution
 max-pollution
 1
 8
-1
+3
 1
 1
 NIL
@@ -455,7 +447,7 @@ pollution-retention
 pollution-retention
 1
 100
-6
+20
 1
 1
 NIL
@@ -524,7 +516,7 @@ vision
 vision
 0
 20
-0
+2
 1
 1
 NIL
@@ -539,28 +531,11 @@ pollution-rate
 pollution-rate
 0
 100
-10
+80
 5
 1
 NIL
 HORIZONTAL
-
-BUTTON
-95
-99
-205
-132
-NIL
-perturbation
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
 
 SWITCH
 8
@@ -582,7 +557,7 @@ init-centers
 init-centers
 0
 30
-5
+2
 1
 1
 NIL
@@ -597,7 +572,7 @@ centers-vision
 centers-vision
 0
 40
-10
+4
 1
 1
 NIL
@@ -612,7 +587,7 @@ influence-centres
 influence-centres
 0
 1
-0.2
+0.9
 0.1
 1
 NIL
