@@ -38,6 +38,7 @@ to setup
   ;; Définition des paramètres initiaux
   clear-all
   reset-ticks
+  
   make-individus init-individus
   if centers? [make-centers init-centers]
   set moyen 0
@@ -74,7 +75,6 @@ to go
     if pcolor != 9.9 [
       decontaminate
     ] 
-    
     set pollution pcolor
     ]
   
@@ -85,6 +85,7 @@ to go
   
   tick
 end
+
 
 
 ;; ------------------------------------------------------
@@ -178,7 +179,6 @@ to set-centers
 end
 
 
-
 ;; ------------------------------------------------------
 ;; DEPLACEMENTS INFDIVIDUS
 
@@ -191,7 +191,6 @@ to move [x]
   ]
   fd x
 end
-
 
 
 ;; ATTRACTION
@@ -367,7 +366,7 @@ INPUTBOX
 143
 130
 init-individus
-200
+100
 1
 0
 Number
@@ -415,7 +414,7 @@ pollution-tolerate
 pollution-tolerate
 0
 8
-3
+2
 1
 1
 NIL
@@ -500,7 +499,7 @@ vision
 vision
 0
 20
-5
+7
 1
 1
 NIL
@@ -515,7 +514,7 @@ pollution-rate
 pollution-rate
 0
 100
-30
+10
 10
 1
 NIL
@@ -584,7 +583,7 @@ SWITCH
 355
 centers?
 centers?
-0
+1
 1
 -1000
 
@@ -1055,14 +1054,13 @@ NetLogo 5.0.5
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="pollution-rate" repetitions="5" runMetricsEveryStep="true">
+  <experiment name="Happyness ƒ poll-rate and vision" repetitions="5" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="1000"/>
-    <metric>happy-regroup</metric>
-    <metric>happy-pollution</metric>
+    <metric>pollution-rate</metric>
+    <metric>vision</metric>
     <metric>happy</metric>
-    <metric>pc_pollution</metric>
     <enumeratedValueSet variable="max-pollution">
       <value value="4"/>
     </enumeratedValueSet>
@@ -1070,10 +1068,61 @@ NetLogo 5.0.5
       <value value="25"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="pollution-rate">
-      <value value="70"/>
+      <value value="0"/>
+      <value value="100"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="vision">
-      <value value="8"/>
+      <value value="0"/>
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="init-individus">
+      <value value="200"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="1000"/>
+    <metric>pollution-rate</metric>
+    <metric>vision</metric>
+    <metric>happy</metric>
+    <metric>somme</metric>
+    <enumeratedValueSet variable="pollution-rate">
+      <value value="0"/>
+      <value value="10"/>
+      <value value="20"/>
+      <value value="30"/>
+      <value value="40"/>
+      <value value="50"/>
+      <value value="60"/>
+      <value value="70"/>
+      <value value="80"/>
+      <value value="90"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="vision-centers">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="init-centers">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="pollution-tolerate">
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="influence-centers">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="centers?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="vision">
+      <value value="0"/>
+      <value value="1"/>
+      <value value="2"/>
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="soil-pollution-retention">
+      <value value="30"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="init-individus">
       <value value="200"/>
