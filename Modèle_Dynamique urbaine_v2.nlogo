@@ -21,7 +21,7 @@ individus-own [
   happy-regroup?
   happy-pollution?
   happy-centers?
-  max-pollution-aleatoire
+  pollution-tolerate-aleatoire
   near-polluted
   voisins
   ]
@@ -62,7 +62,7 @@ to go
   set gradient-pollution 9.9 * (0.001 * pollution-rate)
   
   ask individus [
-    set max-pollution-aleatoire random (max-pollution + 0.99)
+    set pollution-tolerate-aleatoire random (pollution-tolerate + 0.99)
     regroup
     move 1
     pollutate
@@ -126,7 +126,7 @@ to happyness
   ask individus [
     set near-polluted count neighbors with [pcolor <= ( 2 * gradient-pollution)]
     
-    ifelse near-polluted > max-pollution-aleatoire [
+    ifelse near-polluted > pollution-tolerate-aleatoire [
       set happy-pollution? false
       ] [
       set happy-pollution? true
@@ -279,7 +279,7 @@ end
 
 to reac-polution
   ;; Black pollution
-  let black-neighbors? (count neighbors with [pcolor = 0] >= max-pollution-aleatoire)
+  let black-neighbors? (count neighbors with [pcolor = 0] >= pollution-tolerate-aleatoire)
   
   ifelse black-neighbors? [set happy-pollution? false] [set happy-pollution? true]
   
@@ -294,7 +294,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 1
-  let black-neighbors1? (count neighbors with [pcolor = 0 + gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors1? (count neighbors with [pcolor = 0 + gradient-pollution] >= pollution-tolerate-aleatoire)
   
   ifelse black-neighbors1? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -307,7 +307,7 @@ to reac-polution
     ]
   
   ;; Near black pollution 2
-  let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= pollution-tolerate-aleatoire)
   
   ifelse black-neighbors2? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -320,7 +320,7 @@ to reac-polution
     ]
     
   ;; Near black pollution 3
-  let black-neighbors3? (count neighbors with [pcolor = 0 + 3 * gradient-pollution] >= max-pollution-aleatoire)
+  let black-neighbors3? (count neighbors with [pcolor = 0 + 3 * gradient-pollution] >= pollution-tolerate-aleatoire)
   
   ifelse black-neighbors2? [
     ifelse any? neighbors with [pcolor = 9.9] [
@@ -411,8 +411,8 @@ SLIDER
 226
 187
 259
-max-pollution
-max-pollution
+pollution-tolerate
+pollution-tolerate
 0
 8
 3
@@ -493,9 +493,9 @@ PENS
 
 SLIDER
 15
-183
+142
 187
-216
+175
 vision
 vision
 0
@@ -508,14 +508,14 @@ HORIZONTAL
 
 SLIDER
 15
-140
+184
 187
-173
+217
 pollution-rate
 pollution-rate
 0
 100
-40
+30
 10
 1
 NIL
@@ -597,7 +597,7 @@ init-centers
 init-centers
 1
 10
-4
+3
 1
 1
 NIL
