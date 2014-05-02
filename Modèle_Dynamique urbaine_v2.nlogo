@@ -38,7 +38,6 @@ to setup
   ;; Définition des paramètres initiaux
   clear-all
   reset-ticks
-  
   make-individus init-individus
   if centers? [make-centers init-centers]
   set moyen 0
@@ -75,6 +74,7 @@ to go
     if pcolor != 9.9 [
       decontaminate
     ] 
+    
     set pollution pcolor
     ]
   
@@ -85,7 +85,6 @@ to go
   
   tick
 end
-
 
 
 ;; ------------------------------------------------------
@@ -179,6 +178,7 @@ to set-centers
 end
 
 
+
 ;; ------------------------------------------------------
 ;; DEPLACEMENTS INFDIVIDUS
 
@@ -191,6 +191,7 @@ to move [x]
   ]
   fd x
 end
+
 
 
 ;; ATTRACTION
@@ -331,16 +332,15 @@ to reac-polution
     set dispersion? true
     ]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 199
 10
-648
-480
-16
-16
-13.303030303030303
+757
+589
+30
+30
+9.0
 1
 10
 1
@@ -350,10 +350,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+-30
+30
+-30
+30
 1
 1
 1
@@ -362,20 +362,20 @@ ticks
 
 INPUTBOX
 45
-70
+141
 143
-130
+201
 init-individus
-100
+500
 1
 0
 Number
 
 BUTTON
-16
-14
-82
-47
+63
+13
+129
+46
 NIL
 setup
 NIL
@@ -389,10 +389,10 @@ NIL
 1
 
 BUTTON
-112
-14
-175
-47
+105
+73
+168
+106
 NIL
 go
 T
@@ -407,14 +407,14 @@ NIL
 
 SLIDER
 15
-226
+297
 187
-259
+330
 pollution-tolerate
 pollution-tolerate
 0
 8
-2
+3
 1
 1
 NIL
@@ -422,24 +422,24 @@ HORIZONTAL
 
 SLIDER
 16
-269
+340
 188
-302
+373
 soil-pollution-retention
 soil-pollution-retention
 0
 100
-30
+40
 10
 1
 NIL
 HORIZONTAL
 
 PLOT
-660
-307
-904
-483
+834
+213
+1160
+482
 Pourcentage de pollution
 tick
 % pollution
@@ -454,29 +454,10 @@ PENS
 "pc_pollution" 1.0 0 -16777216 true "" "plot pc_pollution"
 
 PLOT
-913
-307
-1129
-483
-Taux de pollution
-pollution
-# cellules polluées
-0.0
-10.0
-0.0
-100.0
-false
-true
-"set-plot-x-range -9.9 0.01\nset-plot-y-range 0 50\nset-histogram-num-bars 100" ""
-PENS
-"Total" 0.1 1 -16777216 true "" "histogram [pcolor * (-1)] of patches"
-"Individus" 0.1 1 -8053223 true "" "histogram [pcolor * (-1)] of patches with [any? individus-here]"
-
-PLOT
-972
-490
-1298
-673
+906
+506
+1399
+786
 Nombre moyen d'individus par groupe
 tick
 nombre
@@ -492,14 +473,14 @@ PENS
 
 SLIDER
 15
-142
+213
 187
-175
+246
 vision
 vision
 0
 20
-7
+4
 1
 1
 NIL
@@ -507,24 +488,24 @@ HORIZONTAL
 
 SLIDER
 15
-184
+255
 187
-217
+288
 pollution-rate
 pollution-rate
 0
 100
-10
+30
 10
 1
 NIL
 HORIZONTAL
 
 PLOT
-8
-490
-477
-673
+17
+600
+592
+783
 Happyness
 tick
 % happy
@@ -541,13 +522,13 @@ PENS
 "Happy-centers" 1.0 0 -13840069 true "" "plot happy-centers / init-individus * 100"
 
 PLOT
-1136
-308
-1303
-484
+1174
+212
+1515
+482
 Taille des groupes - pollution
-taille des groupes
-pollution
+taille moyenne des groupes
+% pollution
 0.0
 10.0
 0.0
@@ -559,9 +540,9 @@ PENS
 "default" 1.0 0 -16777216 true "" "plotxy moyen pc_pollution"
 
 PLOT
-678
+775
 17
-888
+1046
 208
 Happyness   regroup - pollution
 % regroup
@@ -577,66 +558,66 @@ PENS
 "default" 1.0 0 -16777216 true "" "plotxy happy-regroup / init-individus * 100 happy-pollution / init-individus * 100"
 
 SWITCH
-39
-322
-148
-355
+38
+412
+147
+445
 centers?
 centers?
-1
+0
 1
 -1000
 
 SLIDER
-15
-364
-187
-397
+14
+454
+186
+487
 init-centers
 init-centers
 1
 10
-4
+6
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-15
-407
-187
-440
+14
+497
+186
+530
 vision-centers
 vision-centers
 0
 10
-4
+3
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-15
-448
-187
-481
+14
+538
+186
+571
 influence-centers
 influence-centers
 0
 100
-30
+60
 10
 1
 NIL
 HORIZONTAL
 
 PLOT
-480
-490
-948
-673
+18
+791
+486
+974
 Mean happyness
 tick
 % happy
@@ -651,10 +632,10 @@ PENS
 "Happy" 1.0 0 -16777216 true "" "plot happy / init-individus * 100"
 
 PLOT
-890
-18
-1099
-208
+1055
+17
+1264
+207
 Happyness   regroup - centers
 % regroup
 % centers
@@ -669,10 +650,10 @@ PENS
 "default" 1.0 0 -16777216 true "" "plotxy happy-regroup / init-individus * 100 happy-centers / init-individus * 100"
 
 PLOT
-1103
-18
-1312
-208
+1268
+17
+1548
+207
 Happyness   centers - pollution
 % centers
 % pollution
@@ -687,10 +668,10 @@ PENS
 "default" 1.0 0 -16777216 true "" "plotxy happy-centers / init-individus * 100 happy-pollution / init-individus * 100"
 
 TEXTBOX
-17
-307
-167
-325
+16
+397
+166
+415
 Centers' parameters
 11
 0.0
@@ -698,12 +679,29 @@ Centers' parameters
 
 TEXTBOX
 17
-54
+125
 167
-72
+143
 Individus' parameters
 11
 0.0
+1
+
+BUTTON
+18
+72
+81
+105
+NIL
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
 1
 
 @#$#@#$#@
@@ -1054,13 +1052,14 @@ NetLogo 5.0.5
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="Happyness ƒ poll-rate and vision" repetitions="5" runMetricsEveryStep="true">
+  <experiment name="pollution-rate" repetitions="5" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="1000"/>
-    <metric>pollution-rate</metric>
-    <metric>vision</metric>
+    <metric>happy-regroup</metric>
+    <metric>happy-pollution</metric>
     <metric>happy</metric>
+    <metric>pc_pollution</metric>
     <enumeratedValueSet variable="max-pollution">
       <value value="4"/>
     </enumeratedValueSet>
@@ -1068,61 +1067,10 @@ NetLogo 5.0.5
       <value value="25"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="pollution-rate">
-      <value value="0"/>
-      <value value="100"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="vision">
-      <value value="0"/>
-      <value value="3"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="init-individus">
-      <value value="200"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
-    <setup>setup</setup>
-    <go>go</go>
-    <timeLimit steps="1000"/>
-    <metric>pollution-rate</metric>
-    <metric>vision</metric>
-    <metric>happy</metric>
-    <metric>somme</metric>
-    <enumeratedValueSet variable="pollution-rate">
-      <value value="0"/>
-      <value value="10"/>
-      <value value="20"/>
-      <value value="30"/>
-      <value value="40"/>
-      <value value="50"/>
-      <value value="60"/>
       <value value="70"/>
-      <value value="80"/>
-      <value value="90"/>
-      <value value="100"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="vision-centers">
-      <value value="4"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="init-centers">
-      <value value="4"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="pollution-tolerate">
-      <value value="3"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="influence-centers">
-      <value value="30"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="centers?">
-      <value value="true"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="vision">
-      <value value="0"/>
-      <value value="1"/>
-      <value value="2"/>
-      <value value="3"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="soil-pollution-retention">
-      <value value="30"/>
+      <value value="8"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="init-individus">
       <value value="200"/>
