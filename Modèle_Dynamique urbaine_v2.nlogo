@@ -430,7 +430,7 @@ soil-pollution-retention
 soil-pollution-retention
 0
 100
-20
+30
 10
 1
 NIL
@@ -597,7 +597,7 @@ init-centers
 init-centers
 1
 10
-3
+4
 1
 1
 NIL
@@ -611,8 +611,8 @@ SLIDER
 vision-centers
 vision-centers
 0
-40
-15
+10
+4
 1
 1
 NIL
