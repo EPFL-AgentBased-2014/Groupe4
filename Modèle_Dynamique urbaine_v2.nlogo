@@ -256,7 +256,7 @@ to pollutate
     ] [
     set pcolor 0
     ]
-  set t pollution-retention / 4 + 1
+  set t soil-pollution-retention / 4 + 1
 end
 
 
@@ -426,11 +426,11 @@ SLIDER
 269
 188
 302
-pollution-retention
-pollution-retention
+soil-pollution-retention
+soil-pollution-retention
 0
 100
-30
+20
 10
 1
 NIL
