@@ -21,6 +21,7 @@ individus-own [
   happy-regroup?
   happy-pollution?
   happy-centers?
+  max-pollution-aleatoire
   near-polluted
   voisins
   ]
@@ -61,6 +62,7 @@ to go
   set gradient-pollution 9.9 * (0.001 * pollution-rate)
   
   ask individus [
+    set max-pollution-aleatoire random (max-pollution + 0.99)
     regroup
     move 1
     pollutate
@@ -124,7 +126,7 @@ to happyness
   ask individus [
     set near-polluted count neighbors with [pcolor <= ( 2 * gradient-pollution)]
     
-    ifelse near-polluted > 0 [
+    ifelse near-polluted > max-pollution-aleatoire [
       set happy-pollution? false
       ] [
       set happy-pollution? true
@@ -146,7 +148,12 @@ to happyness
   set happy-regroup count individus with [happy-regroup? = true]
   set happy-centers count individus with [happy-centers? = true]
   
-  set happy (happy-regroup + happy-pollution + happy-centers) / 3
+  ifelse centers? [
+    set happy (happy-regroup + happy-pollution + happy-centers) / 3
+  ] [
+    set happy (happy-regroup + happy-pollution) / 2
+  ]
+  
 end
 
 
@@ -249,7 +256,7 @@ to pollutate
     ] [
     set pcolor 0
     ]
-  set t pollution-retention / 5 + 1
+  set t pollution-retention / 4 + 1
 end
 
 
@@ -272,8 +279,6 @@ end
 
 to reac-polution
   ;; Black pollution
-  let max-pollution-aleatoire random max-pollution
-  
   let black-neighbors? (count neighbors with [pcolor = 0] >= max-pollution-aleatoire)
   
   ifelse black-neighbors? [set happy-pollution? false] [set happy-pollution? true]
@@ -328,7 +333,6 @@ to reac-polution
     ]
 end
 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 199
@@ -363,7 +367,7 @@ INPUTBOX
 143
 120
 init-individus
-50
+200
 1
 0
 Number
@@ -409,9 +413,9 @@ SLIDER
 249
 max-pollution
 max-pollution
-1
+0
 8
-2
+3
 1
 1
 NIL
@@ -496,7 +500,7 @@ vision
 vision
 0
 20
-10
+5
 1
 1
 NIL
@@ -511,7 +515,7 @@ pollution-rate
 pollution-rate
 0
 100
-20
+30
 10
 1
 NIL
@@ -608,7 +612,7 @@ centers-vision
 centers-vision
 0
 40
-20
+15
 1
 1
 NIL
@@ -623,7 +627,7 @@ influence-centers
 influence-centers
 0
 100
-70
+30
 10
 1
 NIL
@@ -638,7 +642,7 @@ Mean happyness
 tick
 % happy
 0.0
-10.0
+100.0
 0.0
 100.0
 true
