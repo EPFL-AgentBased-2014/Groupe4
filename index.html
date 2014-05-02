@@ -31,8 +31,8 @@
         <h2>
 <a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
-<p>Nous sommes partis de la volonté de confronter un agent à un dilemme : dans quelle mesure tel individu se regroupera avec d'autres pour accroitre son bonheur sachant que ce regroupement sera pour lui une exposition à certaines nuisances. Il s'agit donc d'analyser le compromis que chaque individu fait pour maximiser son bonheur. Cette analyse aura une dimension géométrique lorsqu'il s'agira de dégager des formes de groupement humain types mais elle sera aussi une étude des causalités lorsqu'il s'agira de déterminer la capacité rétroactive de la pollution produite par les individus. 
-Ce modèle peut aussi être lu comme une utilisation  de ressources limitées dans le temps par un groupement nomade se déplaçant librement sur un territoire.</p>
+<p>Nous sommes partis de la volonté de confronter un agent à un dilemme : dans quelle mesure tel individu se regroupera avec d'autres pour accroitre son bonheur sachant que ce regroupement sera pour lui une exposition à certaines nuisances. L'intérêt du modèle est d'analyser la géométrie des groupes constitués, c'est à dire leur forme et densité, et d'analyser leur dynamique, soit leur propension à se faire et à se défaire et les déplacements inter-groupes et intra-groupes.
+Ce modèle peut aussi être lu comme une utilisation  de ressources limitées dans le temps par un groupement nomade se déplaçant librement sur un territoire. Les centres d'intérêts pouvant être considérés comme des tentatives de sédentarisation.</p>
 
 <h2>
 <a name="hypoth%C3%A8ses" class="anchor" href="#hypoth%C3%A8ses"><span class="octicon octicon-link"></span></a>Hypothèses</h2>
@@ -53,7 +53,7 @@ Ce modèle peut aussi être lu comme une utilisation  de ressources limitées da
 <p>Le paramètre agissant sur les cellules est :</p>
 
 <ul>
-<li>leur capacité à se dépolluer
+<li>leur capacité à se reconstituer 
 Les paramètres agissant sur les individus sont :</li>
 <li>leur capacité à polluer</li>
 <li>leur nombre</li>
@@ -73,7 +73,7 @@ Les paramètres agissant sur les individus sont :</li>
 <ul>
 <li>leur sensibilité à la pollution. Les groupes sont plus compacts si les individus sont moins sensible aux nuisances des autres, ce qui était prévisible.</li>
 <li>la pollution environnante. En effet, lorsque le sol est pollué aucune stabilité est à dénoter, les individus sont isolés et se déplacent en couvrant tout l'espace. Au contraire, passé un certain seuil (dépendant de la pollution et de la "vision") des groupes se forment quasi instantanément qui sont d'autant plus gros que la "vision" des individus en bonne.
-On observe aussi de fortes oscillations cycliques dans le nombre d'individus moyen par groupe lorsque ce dernier est important. Un groupe important est donc moins soudé qu'un petit groupe. Outre la susdite variation qui a une période courte nous observons la présence de cycles sur une plus longue période. En effet, des pics de densité se répètent à intervalles réguliers pour se défaire aussi rapidement (cf la courbe noire ci-dessous).
+On observe aussi de fortes oscillations cycliques dans le nombre d'individus moyen par groupe lorsque ce dernier est important. Un groupe important est donc moins soudé qu'un petit groupe. Outre la susdite variation qui a une période courte nous observons la présence de cycles sur une plus longue période. En effet, des pics de formation de groupes importants se répètent à intervalles réguliers pour se défaire aussi rapidement (cf la courbe noire ci-dessous).
 Enfin, on observe un phénomène de respiration : lorsqu'un groupe pollue son centre, les individus ont tendance à se placer en périphérie le temps que le centre se dépollue, puis ils réinvestissent leur précédent emplacement et ainsi de suite.</li>
 </ul><p>Ce graphique résume une évolution type du bonheur, de la taille des groupes et de la pollution générale. </p>
 
@@ -82,18 +82,18 @@ Enfin, on observe un phénomène de respiration : lorsqu'un groupe pollue son ce
 <p>Lors de l'introduction des centres d'intérêts nous observons que :</p>
 
 <ul>
-<li>la fréquence des changements de taille des groupes est bien plus grande, ils sont donc bien plus instables.</li>
+<li>la fréquence de changement de taille des groupes est bien plus grande, ils sont donc plus instables.</li>
 <li>les pics reviennent avec une période identique mais sont plus importants</li>
 <li>les groupes sont plus importants, ce qui est intuitif.</li>
-<li>le pourcentage de pollution global augmente sensiblement mais ses oscillations sont plus faibles.
-Ainsi un centre d'intérêt ne stabilise pas forcément un groupe, au contraire.</li>
-</ul><p>La dernière partie du graphe nous faisons varier la tolérance à la pollution de la part des individus en l'augmentant. Nous avons aussi augmenté la pollution émise par les individus. Ceci découle d'une hypothèse : si les individus sont moins sensibles à la pollution ils seront plus tentés de polluer. Néanmoins, nous remarquons deux choses :
-la pollution générale diminue malgré l'augmentation de la pollution par individu</p>
+<li>le pourcentage de pollution global est stable mais ses oscillations sont plus faibles.
+Ainsi un centre d'intérêt ne stabilise pas forcément un groupe, surtout si les centres d'intérêts sont proches dans l'espace on l'on observe des échanges d'individus entre les centres d'intérêts.</li>
+</ul><p>A la dernière partie du graphe nous faisons varier la tolérance à la pollution de la part des individus en l'augmentant. Nous avons aussi augmenté la pollution émise par les individus. Ceci découle d'une hypothèse : si les individus sont moins sensibles à la pollution ils seront plus tentés de polluer. Néanmoins, nous remarquons trois choses :</p>
 
 <ul>
+<li>la pollution générale diminue malgré l'augmentation de la pollution par individu</li>
 <li>la taille des groupes augmente</li>
-<li>les groupes se compactent.
-Il est moins dommageable de polluer d'une façon importante sur une surface localisée que de polluer modérément sur une large surface.</li>
+<li>les groupes se compacifient
+Il est donc moins dommageable de polluer d'une façon importante sur une surface localisée que de polluer modérément sur une large surface (bien que cette hypothèse requiert dans la réalité une absence de la diffusion de la pollution).</li>
 </ul><p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/Graphiques/moyen%20indiv%20page.jpg" alt=""></p>
 
 <p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/Graphiques/pollution%20modif%20page.png" alt=""></p>
@@ -101,8 +101,9 @@ Il est moins dommageable de polluer d'une façon importante sur une surface loca
 <h2>
 <a name="analogies-et-conclusions" class="anchor" href="#analogies-et-conclusions"><span class="octicon octicon-link"></span></a>Analogies et conclusions</h2>
 
-<p>Vis à vis de l'ensemble de la plateforme nous pouvons affirmer que la création de groupes compacts est moins destructrice que l'éparpillement de petits groupes d'individus qui certes polluent moins mais polluent sur une plus grande surface. Ce second comportement peut être comparé au phénomène de péri-urbanisation ou à celui des "maisons de campagne" qui par leur dispersement ont un impact plus important sur l'environnement que les villes denses.
-L'introduction de centres d'intérêts corrobore cette affirmation : en fixant la population à un endroit donné la pollution générale diminue de plus de moitié.</p>
+<p>Le dernier résultat ci-dessus présenté peut être comparé au phénomène de péri-urbanisation que l'on remarque dans les villes tentaculaires qui par leur dispersement ont un impact plus important sur l'ensemble de l'environnement que les villes denses bien que leur urbanisation n'ai moins d'impact sur le sol.
+L'introduction de centres d'intérêts corrobore cette affirmation : en fixant la population à un endroit donné la pollution générale diminue sensiblement.
+Le phénomène d'éclatement/formation des groupes est analogue à la formation d'une peuplade importante et stable à partir de tribus éparses, prémisse à une civilisation, lorsque les ressources disponibles le permettent. Dans les moments de disettes le groupe se défait ce qui reconduit à la formation de nomades plus ou moins fixés tel l'histoire des hordes mongoles du temps de Gengis Khan nous l'indique.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/EPFL-AgentBased-2014">EPFL-AgentBased-2014</a></p>
