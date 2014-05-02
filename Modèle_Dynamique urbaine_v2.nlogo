@@ -58,7 +58,7 @@ end
 
 
 to go 
-  ;; 
+  ;; A chaque tick, on effectue cette procédure!
   set gradient-pollution 9.9 * (0.001 * pollution-rate)
   
   ask individus [
@@ -200,7 +200,7 @@ to regroup
   ;; On tente cette procédure à chaque tick
   ;; Si on trouve au moins un individu ou un centre d'intérêt dans notre rayon de vision, alors on s'en raproche. Sinon
   ;; on continue à bouger aléatoirement (procédure move ci-dessous)
-  ifelse any? centers in-radius centers-vision [
+  ifelse any? centers in-radius vision-centers [
     let i random-float 1
     ifelse i < influence-centers / 100 [
       regroup-toward-centers
@@ -233,7 +233,7 @@ end
 
 to regroup-toward-centers
   ;; Procédure pour se rapprocher des individus
-  let centerISee centers in-radius centers-vision
+  let centerISee centers in-radius vision-centers
   
   if count centerISee > 0 [
     set heading towards one-of centerISee
@@ -363,9 +363,9 @@ ticks
 
 INPUTBOX
 45
-60
+70
 143
-120
+130
 init-individus
 200
 1
@@ -374,9 +374,9 @@ Number
 
 BUTTON
 16
-19
+14
 82
-52
+47
 NIL
 setup
 NIL
@@ -391,9 +391,9 @@ NIL
 
 BUTTON
 112
-19
+14
 175
-52
+47
 NIL
 go
 T
@@ -408,9 +408,9 @@ NIL
 
 SLIDER
 15
-216
+226
 187
-249
+259
 max-pollution
 max-pollution
 0
@@ -423,9 +423,9 @@ HORIZONTAL
 
 SLIDER
 16
-259
+269
 188
-292
+302
 pollution-retention
 pollution-retention
 0
@@ -493,9 +493,9 @@ PENS
 
 SLIDER
 15
-173
+183
 187
-206
+216
 vision
 vision
 0
@@ -508,14 +508,14 @@ HORIZONTAL
 
 SLIDER
 15
-130
+140
 187
-163
+173
 pollution-rate
 pollution-rate
 0
 100
-30
+40
 10
 1
 NIL
@@ -579,20 +579,20 @@ PENS
 
 SWITCH
 39
-302
+322
 148
-335
+355
 centers?
 centers?
-1
+0
 1
 -1000
 
 SLIDER
 15
-344
+364
 187
-377
+397
 init-centers
 init-centers
 1
@@ -605,11 +605,11 @@ HORIZONTAL
 
 SLIDER
 15
-387
+407
 187
-420
-centers-vision
-centers-vision
+440
+vision-centers
+vision-centers
 0
 40
 15
@@ -620,9 +620,9 @@ HORIZONTAL
 
 SLIDER
 15
-428
+448
 187
-461
+481
 influence-centers
 influence-centers
 0
@@ -686,6 +686,26 @@ false
 "" ""
 PENS
 "default" 1.0 0 -16777216 true "" "plotxy happy-centers / init-individus * 100 happy-pollution / init-individus * 100"
+
+TEXTBOX
+17
+307
+167
+325
+Centers' parameters
+11
+0.0
+1
+
+TEXTBOX
+17
+54
+167
+72
+Individus' parameters
+11
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
