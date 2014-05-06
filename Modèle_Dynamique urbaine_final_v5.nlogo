@@ -81,6 +81,10 @@ to setup
   clear-all
   reset-ticks
   
+  ;; Initialisation des formes des tortues
+  set-default-shape individus "person"
+  set-default-shape centers "flag"
+  
   make-individus init-individus 
   
   ;; Initialisation des variables
@@ -143,10 +147,6 @@ to setup
   ask patches [
     set pcolor 9.9
   ]
-  
-  ;; Initialisation des formes des tortues
-  set-default-shape individus "person"
-  set-default-shape centers "flag"
   
   happiness
   
@@ -569,9 +569,9 @@ Number
 
 BUTTON
 13
-47
+34
 79
-80
+67
 NIL
 setup
 NIL
@@ -586,9 +586,9 @@ NIL
 
 BUTTON
 109
-47
+34
 172
-80
+67
 NIL
 go
 T
