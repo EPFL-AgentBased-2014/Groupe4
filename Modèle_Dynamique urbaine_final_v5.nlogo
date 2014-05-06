@@ -752,7 +752,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot moyenne5-nb-groups ;nb-groups"
+"default" 1.0 0 -16777216 true "" "plot moyenne5-nb-groups"
 
 MONITOR
 700
@@ -1191,7 +1191,12 @@ NetLogo 5.0.5
   <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
-    <metric>count turtles</metric>
+    <timeLimit steps="500"/>
+    <metric>happy-regroup</metric>
+    <metric>happy-pollution</metric>
+    <metric>happy</metric>
+    <metric>pc_pollution</metric>
+    <metric>nb-groups</metric>
     <enumeratedValueSet variable="pollution-rate">
       <value value="0"/>
       <value value="10"/>
@@ -1217,9 +1222,6 @@ NetLogo 5.0.5
       <value value="16"/>
       <value value="18"/>
       <value value="20"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="vision-centers">
-      <value value="3"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="soil-pollution-retention">
       <value value="30"/>
