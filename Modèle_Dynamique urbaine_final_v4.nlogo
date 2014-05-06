@@ -46,7 +46,7 @@ globals [
   recall-nb-groups3
   recall-nb-groups4
   moyenne5-nb-groups
-  ]
+]
 
 
 breed [individus individu]
@@ -64,7 +64,7 @@ individus-own [
   near-polluted
   voisins
   peopleITolerate
-  ]
+]
 
 
 patches-own [
@@ -73,7 +73,7 @@ patches-own [
   pollution
   nb-colorated-patches-in-visoin
   count-colorated-in-vision
-  ]
+]
 
 
 to setup
@@ -84,7 +84,7 @@ to setup
   make-individus init-individus 
   
   ;; Initialisation des variables
-
+  
   set moyenne-individus 0
   set nb-groups 0
   set centers? false
@@ -138,12 +138,14 @@ to setup
     set happy-pollution? false
     set happy-centers? false
     set peopleITolerate 30
-    ]
+  ]
   
   ask patches [
     set pcolor 9.9
-    ]
+  ]
   
+  ;; Initialisation des formes des tortues
+  set-default-shape individus "person"
   set-default-shape centers "flag"
   
   happiness
@@ -162,17 +164,17 @@ to go
     pollutate
     reac-polution
     compter_voisins
-    ] 
+  ] 
   
   ask patches [
     set nb-colorated-patches-in-visoin 0
     set count-colorated-in-vision 0
-
+    
     if pcolor != 9.9 [
       decontaminate
     ]
     set pollution pcolor
-    ]
+  ]
   
   happiness
   
@@ -181,6 +183,7 @@ to go
   set nb-groups (init-individus / moyenne-individus)
   set nb-groups round nb-groups
   
+  ifelse any? centers [set centers? true] [set centers? false]
   
   ;; Lissage des courbes dans l'interface
   
@@ -247,12 +250,11 @@ end
 
 to make-individus [#n]
   ;; Créer des individus
-  set-default-shape individus "person"
   create-individus #n 
-    [ 
+  [ 
     set-individus
     setxy random-xcor random-ycor
-    ]
+  ]
 end
 
 
@@ -290,28 +292,28 @@ to happiness
       ifelse A <= ceiling (peopleITolerate / 2) [
         set count-happy-regroup A * 1 / ceiling ((peopleITolerate) / 2)
         set sum-happy-regroup sum-happy-regroup + count-happy-regroup
-        ] [
+      ] [
         set count-happy-regroup 1 - (A - ceiling (peopleITolerate / 2)) * 1 / ceiling (peopleITolerate)
         set sum-happy-regroup sum-happy-regroup + count-happy-regroup
-        ]
-      ] [
-      set count-happy-regroup 0
       ]
-      
+    ] [
+      set count-happy-regroup 0
+    ]
+    
     ;; L'individu est heureux s'il n'est pas entouré de plus de # pollution-tolerate-aleatoire cellules autour de lui
     ifelse near-polluted > pollution-tolerate-aleatoire [
       set happy-pollution? false
-      ] [
+    ] [
       set happy-pollution? true
-      ]
+    ]
     
     ;; L'individu est heureux s'il voit un centre d'intérêt dans son champ de vision
     ifelse any? centers in-radius vision [ ; On devient heureux si on est aussi proche d'un centre que l'on souhaîte être proche d'un individu
       set happy-centers? true
-      ] [
+    ] [
       set happy-centers? false
-      ]
     ]
+  ]
   
   ;; On comptabilise les heureux
   set happy-regroup sum-happy-regroup / init-individus
@@ -332,16 +334,23 @@ end
 ;; CENTERS
 
 to draw-centers
+  ;; On crée les centres d'intérêts si le bouton "draw" de l'interface est enfoncé, et si le bouton gauche de la souris clique sur les patches où l'utilisateur le souhaite.
+  ;; Si un centre d'intérêt est déjà placé sur le patch sélectionné, alors ça l'efface. Sinon, ça en crée.
+  ;; Tant que le bouton gauche de la souris est appuyé et que la souris se ballade sur l'écran, alors l'utilisateur crée/supprime des centres d'intérêts.
   let erasing? [any? centers-here] of patch mouse-xcor mouse-ycor
-  while [mouse-down?]
-    [ ask patch mouse-xcor mouse-ycor
-      [ ifelse erasing?
-        [ ask centers-here [die] ]
-        [ if count centers-here < 1 
-          [
-          sprout-centers 1 [set-centers]
-        ] ] ]
-      display ]
+  while [mouse-down?] [
+    ask patch mouse-xcor mouse-ycor
+      [ 
+        ifelse erasing? [ 
+          ask centers-here [die] 
+        ] [ 
+          if count centers-here < 1 [
+            sprout-centers 1 [set-centers]
+          ] 
+        ]
+      ]  
+    display 
+  ]
 end
 
 
@@ -352,6 +361,7 @@ to set-centers
 end
 
 to erase-centers
+  ;; Supprimer tous les centres d'intérêts d'un coup (bouton 'erase' dans l'interface)
   ask centers [die]
 end
 
@@ -404,10 +414,10 @@ to regroup-towards-individus
       set regroup? true
       set dispersion? false
       set happy-regroup? true
-      ] [
-      move 2
-      ]
     ] [
+      move 2
+    ]
+  ] [
     set move? true
     set regroup? false
     set happy-regroup? false
@@ -437,10 +447,12 @@ to pollutate
   ifelse pcolor >= gradient-pollution [
     ;; Gradient de noir
     set pcolor pcolor - gradient-pollution
-    ] [
+  ] [
     set pcolor 0
-    ]
-  set t soil-pollution-retention / 4 + 1
+  ]
+  if pollution-rate != 0 [
+    set t soil-pollution-retention / 4 + 1
+  ]
 end
 
 
@@ -449,10 +461,10 @@ to decontaminate
   set t t - 1
   let newvalue pcolor + gradient-pollution
   if t <= 0 [
-  ifelse newvalue < 8.9 [
-    set pcolor pcolor + 1
+    ifelse newvalue < 8.9 [
+      set pcolor pcolor + 1
     ] [
-    set pcolor 9.9
+      set pcolor 9.9
     ]
   ]
 end
@@ -470,12 +482,12 @@ to reac-polution
   ifelse black-neighbors? [
     ifelse any? neighbors with [pcolor = 9.9] [
       set heading towards one-of neighbors with [pcolor = 9.9]
-      ] [
-        move 3
-      ] 
     ] [
-      set dispersion? true
-    ]
+      move 3
+    ] 
+  ] [
+    set dispersion? true
+  ]
   
   ;; Near black pollution 1
   let black-neighbors1? (count neighbors with [pcolor = 0 + gradient-pollution] >= pollution-tolerate-aleatoire)
@@ -486,9 +498,9 @@ to reac-polution
     ] [
       move 2.5
     ] 
-    ] [
+  ] [
     set dispersion? true
-    ]
+  ]
   
   ;; Near black pollution 2
   let black-neighbors2? (count neighbors with [pcolor = 0 + 2 * gradient-pollution] >= pollution-tolerate-aleatoire)
@@ -499,10 +511,10 @@ to reac-polution
     ] [
       move 2
     ] 
-    ] [
+  ] [
     set dispersion? true
-    ]
-    
+  ]
+  
   ;; Near black pollution 3
   let black-neighbors3? (count neighbors with [pcolor = 0 + 3 * gradient-pollution] >= pollution-tolerate-aleatoire)
   
@@ -512,11 +524,10 @@ to reac-polution
     ] [
       move 1
     ] 
-    ] [
+  ] [
     set dispersion? true
-    ]
+  ]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 199
@@ -774,7 +785,7 @@ TEXTBOX
 541
 1391
 653
-Ce modèle montre le comportement d'individus à la quête du bonheur. Le bonheur est fonction de 3 caractéristiques:\n1° le nombre d'individus visibles dans un rayon \"vision\". S'il est compris entre 0 et 15, alors l'individu est graduellement plus heureux plus ce nombre augmente, l'inverse entre 15 et 30, et au delà de 30 individus, il cherche à bouger dans un rayon de 2 pas autours de lui pour trouver une meilleure situation.\n2° la pollution qui entoure l'individu. Moins il y en a, plus il est heureux. Le seuil de tolérance est fixé aléatoirement entre 0 et pollution-tolerate. En se déplaçant, l'individu pollue (déchets); il laisse une trace derrière lui. Plus la case est polluée, plus elle devient noire. Le sol possède une capacité de rétention de la pollution: soil-pollution-retention.\n3° les centres d'intérêts (marché, école, gallerie d'art...). Si un centre d'intérêt se trouve dans le rayon de vision de l'individu, alros il est heureux. Ces centres d'intérêts possèdent une vision. Plus ils \"voient loin\", plus les individus sont \"appelés\" à s'y rendre, ainsi qu'une influence, plus cette influence est grande, plus les individus seront captivés et resteront proche de ce centre d'intérêt. Pour dessiner un centre d'intérêt, actionner 'draw', et maintenir le bouton gauche de la souris là où vous le souhaitez. Pour effacer un centre d'intérêt, cliquer sur celui-ci en ayant activé 'draw'. Finalement, pour supprimer tous les centres de la fenêtre, cliquer sur 'erase'.
+Ce modèle montre le comportement d'individus à la quête du bonheur. Le bonheur est fonction de 3 caractéristiques:\n  1° Le nombre d'individus visibles dans un rayon \"vision\". Si ce nombre d'individus est compris entre 0 et 15, alors l'individu est graduellement plus heureux plus ce nombre augmente, l'inverse entre 15 et 30, et au delà de 30 individus, il cherche à bouger dans un rayon de 2 pas autours de lui pour trouver une meilleure situation.\n  2° La pollution qui entoure l'individu. Moins il y en a, plus il est heureux. Le seuil de tolérance est fixé aléatoirement entre 0 et pollution-tolerate pour chaque individu. En se déplaçant, l'individu pollue (il produit des déchets); il laisse une trace derrière lui. Plus la case est polluée, plus elle devient noire. Le sol possède une capacité de rétention de la pollution: soil-pollution-retention.\n  3° Les centres d'intérêts (marché, école, gallerie d'art...). Si au moins un centre d'intérêt se trouve dans le rayon de vision de l'individu, alros il est heureux. Ces centres d'intérêts possèdent une vision. Plus ils \"voient loin\", plus les individus sont \"appelés\" à s'y rendre. Ils possèdent également une influence et plus cette influence est grande, plus les individus seront captivés et resteront proche de ce centre d'intérêt. Pour dessiner un centre d'intérêt, actionner 'draw', et maintenir le bouton gauche de la souris là où vous le souhaitez. Pour effacer un centre d'intérêt, cliquer sur celui-ci en ayant activé 'draw'. Finalement, pour supprimer tous les centres de la fenêtre, cliquer sur 'erase'.
 11
 0.0
 1
