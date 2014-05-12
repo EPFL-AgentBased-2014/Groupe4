@@ -51,7 +51,7 @@
 
 <ul>
 <li>Un regroupement de personnes est un phénomène émergent</li>
-<li>Tout individu crée des nuisances, celles-ci sont plus importantes s'il est dans un groupe</li>
+<li>Tout individu crée des nuisances</li>
 <li>Tout individu veut se socialiser</li>
 <li>Tout individu fuit de trop importantes nuisances</li>
 </ul><h1>
@@ -65,12 +65,14 @@
 <p>Le paramètre agissant sur les cellules est :</p>
 
 <ul>
-<li>leur capacité à se dépolluer 
-Les paramètres agissant sur les individus sont :</li>
+<li>leur capacité à se dépolluer </li>
+</ul><p>Les paramètres agissant sur les individus sont :</p>
+
+<ul>
 <li>leur capacité à polluer</li>
 <li>leur nombre</li>
 <li>leur capacité à se constituer comme groupe</li>
-<li>leur sensibilité à la pollution</li>
+<li>leur sensibilité à la pollution et à la surpopulation</li>
 <li>l'attractivité du centre d'intérêt.</li>
 </ul><h1>
 <a name="proc%C3%A9dure" class="anchor" href="#proc%C3%A9dure"><span class="octicon octicon-link"></span></a>Procédure</h1>
@@ -87,7 +89,8 @@ Les paramètres agissant sur les individus sont :</li>
 
 <ul>
 <li>leur sensibilité à la pollution. Les groupes sont plus compacts si les individus sont moins sensible aux nuisances des autres, ce qui était prévisible.</li>
-<li>la pollution environnante. En effet, lorsque le sol est pollué aucune stabilité est à dénoter, les individus sont isolés et se déplacent en couvrant tout l'espace. Au contraire, passé un certain seuil (dépendant de la pollution et de la "vision") des groupes se forment quasi instantanément qui sont d'autant plus gros que la "vision" des individus en bonne.</li>
+<li>la pollution environnante. En effet, lorsque le sol est pollué aucune stabilité est à dénoter, les individus sont isolés et se déplacent en couvrant tout l'espace. Au contraire, passé un certain seuil (dépendant de la pollution et de la "vision") des groupes se forment quasi instantanément qui sont d'autant plus gros que la "vision" des individus est bonne.</li>
+<li>la densité de population environnante (à partir d'un seuil le groupe se disloque).</li>
 </ul><p>De plus nous observons deux types d'oscillations du nombre moyen d'individus par groupe :</p>
 
 <ul>
@@ -99,9 +102,14 @@ Les paramètres agissant sur les individus sont :</li>
 
 <p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/Graphiques/Phe%CC%81nome%CC%80ne-respiration/Capture%20d%E2%80%99e%CC%81cran%202014-05-11%20a%CC%80%2019.37.11.png" alt=""></p>
 
-<p>Ce graphique résume une évolution type du bonheur, de la taille des groupes et de la pollution générale. </p>
+<p>Ce graphique résume une évolution type du bonheur, de la taille des groupes et de la pollution générale. 
+On remarque que le bonheur moyen est stable en comparaison avec la satisfaction due à l'absence de pollution ou à la proximité sociale. Il semble que les individus réussissent un compromis entre ces deux paramètres.</p>
 
-<p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/Graphiques/Expe%CC%81rience/5%20centres/Graph%20type%20bonheur.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/images/Courbe%20du%20bonheur.png" alt=""></p>
+
+<p>Enfin, indépendamment de la distribution des centres d'intérêts on visualise un optimum du bonheur moyen en faisant varier la capacité à se rassembler et la pollution émise (cf ci-dessous).</p>
+
+<p><img src="https://raw.githubusercontent.com/EPFL-AgentBased-2014/Groupe4/master/Graphiques/Expe%CC%81rience/0%20centre/Happy.png" alt=""></p>
 
 <h2>
 <a name="influence-des-param%C3%A8tres-principaux" class="anchor" href="#influence-des-param%C3%A8tres-principaux"><span class="octicon octicon-link"></span></a>Influence des paramètres principaux</h2>
